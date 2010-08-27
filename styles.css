@@ -1,0 +1,50 @@
+body, textarea, input {
+    font: 12px monospace;
+}
+body {
+    background: #eee;
+}
+
+textarea {
+    width: 99%;
+    height: 400px;
+    margin: auto;
+    display: block;
+}
+
+input {
+    width: 99%;
+    margin: auto;
+    display: block;
+    height: 30px;
+    font-size: 20px;
+}
+
+.output {
+    padding: 5px 10px;
+    margin: 10px .4%;
+}
+
+.output, textarea {
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    border: 1px solid #aaa;
+    background: #fff;
+}
+
+.help {
+    width: 33%;
+    float: left;
+    white-space: pre;
+}
+
+.footer {
+    width: 100%;
+    clear: left;
+    text-align: center;
+    color: #aaa;
+}
+.footer a {
+    color: #aaa;
+}

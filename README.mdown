@@ -1,0 +1,41 @@
+PHP Console
+===========
+
+A web console to try your PHP code into
+
+Creating a test file or using php's interactive mode can be a bit cumbersome to try random php snippets. This allows you to run small bits of code easily right from your browser.
+
+It is secure since accessible only from the local host, and very easy to setup and use.
+
+Setup
+-----
+
+Clone the git repo or download it as a zip/tarball, drop it somewhere in your local web document root and access it with http://localhost/path/to/php-console
+
+Contribute
+----------
+
+If you like this piece of software, please consider contributing back with Flattr or Pledgie:
+
+<a href="http://flattr.com/thing/55112/PHP-Web-Debug-Console" target="_blank"><img src="http://api.flattr.com/button/button-static-50x60.png" title="Flattr this" border="0" /></a> <a href="http://pledgie.com/campaigns/12919"><img alt="Click here to lend your support to slippy and make a donation via pledgie.com !" src="http://www.pledgie.com/campaigns/12919.png?skin_name=chrome" border="0" /></a>
+
+Code contributions or ideas are obviously also much welcome.
+
+Author
+------
+
+Jordi Boggiano - <j.boggiano@seld.be><br />
+<http://seld.be/> - <http://twitter.com/seldaek>
+
+Changelog
+---------
+
+- 1.0.0
+  - Initial Public Release
+
+License
+-------
+
+PHP Console is licensed under the New BSD License, which means you can do pretty much anything you want with it.
+
+New BSD License - see the LICENSE file for details
