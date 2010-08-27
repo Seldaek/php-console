@@ -30,6 +30,8 @@ Jordi Boggiano - <j.boggiano@seld.be><br />
 Changelog
 ---------
 
+- 1.1.0
+  - Added a toggle button to expand/collapse all krumo sub-trees at once
 - 1.0.0
   - Initial Public Release
 

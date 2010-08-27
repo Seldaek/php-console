@@ -55,4 +55,16 @@ $(function() {
             $('textarea[name="code"]').focus();
         }
     });
+
+    // adds a toggle button to expand/collapse all krumo sub-trees at once
+    if ($('.krumo-expand').length > 0) {
+        $('<a class="expand" href="#">Toggle all</a>')
+            .click(function(e) {
+                $('div.krumo-element.krumo-expand').each(function(idx, el) {
+                    krumo.toggle(el);
+                });
+                e.preventDefault();
+            })
+            .prependTo('.output');
+    }
 });
