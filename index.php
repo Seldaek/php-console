@@ -18,7 +18,7 @@ if ($_SERVER['REMOTE_ADDR'] != '127.0.0.1') {
     die('ERR/401 Go Away');
 }
 
-define('PHP_CONSOLE_VERSION', '1.0');
+define('PHP_CONSOLE_VERSION', '1.1.0-dev');
 require 'krumo/class.krumo.php';
 
 ini_set('log_errors', 0);
