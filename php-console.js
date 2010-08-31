@@ -36,7 +36,8 @@ $(function() {
                 }
                 caret = $(this).getCaret();
                 part = $(this).val().substring(0, caret);
-                if (matches = part.match(/(\r?\n +)[^\r\n]*$/)) {
+                matches = part.match(/(\r?\n +)[^\r\n]*$/);
+                if (matches) {
                     $(this).val(function(idx, val) {
                         return val.substring(0, caret) + matches[1] + val.substring(caret);
                     });
@@ -54,6 +55,18 @@ $(function() {
         if (e.keyCode === 9) {
             $('textarea[name="code"]').focus();
         }
+    });
+
+    $('form').submit(function(e){
+        e.preventDefault();
+        $('div.output').html('<img src="loader.gif" class="loader" alt="" /> Loading ...');
+        $.post('?js=1', $(this).serializeArray(), function(res) {
+            if (res.match(/#end-php-console-output#$/)) {
+                $('div.output').html(res.substring(0, res.length-24));
+            } else {
+                $('div.output').html(res + "<br /><br /><em>Script ended unexpectedly.</em>");
+            }
+        });
     });
 
     // adds a toggle button to expand/collapse all krumo sub-trees at once

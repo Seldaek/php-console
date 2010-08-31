@@ -48,7 +48,13 @@ if (isset($_POST['code'])) {
 
     ob_start();
     eval($code);
-    $debugOutput = '<div class="output">'.ob_get_clean().'</div>';
+    $debugOutput = ob_get_clean();
+
+    if (isset($_GET['js'])) {
+        header('Content-Type: text/plain');
+        echo $debugOutput;
+        die('#end-php-console-output#');
+    }
 }
 
 ?>
@@ -63,7 +69,8 @@ if (isset($_POST['code'])) {
         <script type="text/javascript" src="php-console.js"></script>
         </script>
     </head>
-    <body><?php echo $debugOutput ?>
+    <body>
+        <div class="output"><?php echo $debugOutput ?></div>
         <form method="POST" action="">
             <textarea cols="100" rows="20" name="code"><?php echo (isset($_POST['code']) ? htmlentities($_POST['code'], ENT_QUOTES, 'UTF-8') : null) ?></textarea>
             <input type="submit" name="subm" value="Try this!" />

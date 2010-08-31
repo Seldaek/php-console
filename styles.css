@@ -29,6 +29,10 @@ a {
     margin: 10px .4%;
 }
 
+.output img.loader {
+    margin-bottom: -4px;
+}
+
 .output, textarea {
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
