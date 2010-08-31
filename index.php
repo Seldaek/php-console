@@ -73,6 +73,7 @@ if (isset($_POST['code'])) {
         <div class="output"><?php echo $debugOutput ?></div>
         <form method="POST" action="">
             <textarea cols="100" rows="20" name="code"><?php echo (isset($_POST['code']) ? htmlentities($_POST['code'], ENT_QUOTES, 'UTF-8') : null) ?></textarea>
+            <div class="statusbar">Line: 1, Column: 1</div>
             <input type="submit" name="subm" value="Try this!" />
         </form>
         <div class="help">

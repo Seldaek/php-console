@@ -32,6 +32,7 @@ Changelog
 
 - 1.1.0
   - Script execution is now done via an async js request, preventing die() and exception to mess up the entire console
+  - Added a status bar with char/line display
   - Added a toggle button to expand/collapse all krumo sub-trees at once
 - 1.0.0
   - Initial Public Release

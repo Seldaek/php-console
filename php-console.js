@@ -12,6 +12,19 @@
  * Source on Github http://github.com/Seldaek/php-console
  */
 $(function() {
+
+    var updateStatusBar;
+
+    // updates the text of the status bar
+    updateStatusBar = function() {
+        var caret, part, matches;
+        caret = $('textarea[name="code"]').getCaret();
+        part = $('textarea[name="code"]').val().substring(0, caret);
+        matches = part.match(/(\r?\n)?([^\r\n]*)/g);
+        part = matches.length > 1 ? matches[matches.length - 2] : matches[0];
+        $('.statusbar').text('Line: ' + Math.max(1, matches.length-1) + ', Column: ' + (matches.length > 2 ? part.length : part.length + 1));
+    };
+
     $('textarea[name="code"]')
         .keydown(function(e) {
             var caret, part, matches;
@@ -46,8 +59,14 @@ $(function() {
                 }
                 break;
             }
+
+            updateStatusBar();
         })
+        .keyup(updateStatusBar)
+        .click(updateStatusBar)
         .focus();
+
+    updateStatusBar();
 
     $('input[name="subm"]').keyup(function(e) {
         // set the focus back to the textarea if pressing tab moved
