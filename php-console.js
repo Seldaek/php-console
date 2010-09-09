@@ -17,9 +17,11 @@
 
     options = {
         tab: '    '
-    }
+    };
 
-    // updates the text of the status bar
+    /**
+     * updates the text of the status bar
+     */
     updateStatusBar = function() {
         var caret, part, matches, charCount, lineCount;
         caret = $('textarea[name="code"]').getCaret();
@@ -38,6 +40,9 @@
         $('.statusbar').text('Line: ' + lineCount + ', Column: ' + charCount);
     };
 
+    /**
+     * handler for keypress/keydown events
+     */
     handleKeyPress = function(e) {
         var caret, part, matches, re;
         switch(e.keyCode) {
@@ -84,6 +89,38 @@
         updateStatusBar();
     };
 
+    /**
+     * adds a toggle button to expand/collapse all krumo sub-trees at once
+     */
+    refreshKrumoState = function() {
+        if ($('.krumo-expand').length > 0) {
+            $('<a class="expand" href="#">Toggle all</a>')
+                .click(function(e) {
+                    $('div.krumo-element.krumo-expand').each(function(idx, el) {
+                        krumo.toggle(el);
+                    });
+                    e.preventDefault();
+                })
+                .prependTo('.output');
+        }
+    };
+
+    /**
+     * does an async request to eval the php code and displays the result
+     */
+    handleSubmit = function(e) {
+        e.preventDefault();
+        $('div.output').html('<img src="loader.gif" class="loader" alt="" /> Loading ...');
+        $.post('?js=1', $(this).serializeArray(), function(res) {
+            if (res.match(/#end-php-console-output#$/)) {
+                $('div.output').html(res.substring(0, res.length-24));
+            } else {
+                $('div.output').html(res + "<br /><br /><em>Script ended unexpectedly.</em>");
+            }
+            refreshKrumoState();
+        });
+    }
+
     $.console = function(settings) {
         $.extend(options, settings);
 
@@ -99,40 +136,18 @@
                 $('textarea[name="code"]').keydown(handleKeyPress);
             }
 
-            updateStatusBar();
+            $('form').submit(handleSubmit);
 
+            updateStatusBar();
+            refreshKrumoState();
+
+            // set the focus back to the textarea if pressing tab moved
+            // the focus to the submit button (opera bug)
             $('input[name="subm"]').keyup(function(e) {
-                // set the focus back to the textarea if pressing tab moved
-                // the focus to the submit button (opera bug)
                 if (e.keyCode === 9) {
                     $('textarea[name="code"]').focus();
                 }
             });
-
-            $('form').submit(function(e){
-                e.preventDefault();
-                $('div.output').html('<img src="loader.gif" class="loader" alt="" /> Loading ...');
-                $.post('?js=1', $(this).serializeArray(), function(res) {
-                    if (res.match(/#end-php-console-output#$/)) {
-                        $('div.output').html(res.substring(0, res.length-24));
-                    } else {
-                        $('div.output').html(res + "<br /><br /><em>Script ended unexpectedly.</em>");
-                    }
-                });
-            });
-
-            // adds a toggle button to expand/collapse all krumo sub-trees at once
-            if ($('.krumo-expand').length > 0) {
-                $('<a class="expand" href="#">Toggle all</a>')
-                    .click(function(e) {
-                        $('div.krumo-element.krumo-expand').each(function(idx, el) {
-                            krumo.toggle(el);
-                        });
-                        e.preventDefault();
-                    })
-                    .prependTo('.output');
-            }
         });
-
-    }
+    };
 }());
