@@ -7,6 +7,11 @@ Creating a test file or using php's interactive mode can be a bit cumbersome to 
 
 It is secure since accessible only from the local host, and very easy to setup and use.
 
+Screenshot
+----------
+
+<img src="http://seld.be/_misc/php-console.png" alt="PHP Console screenshot" border="0" />
+
 Setup
 -----
 
