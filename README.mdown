@@ -51,3 +51,11 @@ License
 PHP Console is licensed under the New BSD License, which means you can do pretty much anything you want with it.
 
 New BSD License - see the LICENSE file for details
+
+Acknowledgements
+----------------
+
+PHP Console bundles the following libraries, and the work of their respective author is very much appreciated:
+
+- [krumo](http://krumo.sourceforge.net/) licensed under the LGPL
+- [jQuery](http://jquery.com) licensed under the MIT License
