@@ -1,5 +1,10 @@
 <?php
 
+$options = array(
+    // which string should represent a tab for indentation
+    'tab' => '    ',
+);
+
 /**
  * PHP Console
  *
@@ -67,6 +72,10 @@ if (isset($_POST['code'])) {
         <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
         <script type="text/javascript" src="jquery.selections.js"></script>
         <script type="text/javascript" src="php-console.js"></script>
+        <script type="text/javascript">
+            $.console({
+                tab: <?php echo json_encode($options['tab']) ?>
+            });
         </script>
     </head>
     <body>

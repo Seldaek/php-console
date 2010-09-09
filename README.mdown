@@ -36,6 +36,7 @@ Changelog
   - Added a toggle button to expand/collapse all krumo sub-trees at once
   - Cross-browser compatibility enhancements
   - Removing a tab (i.e. 4 spaces) on backspace now
+  - Made tab character(s) configurable (see index.php)
 - 1.0.0
   - Initial Public Release
 

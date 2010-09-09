@@ -11,9 +11,13 @@
  *
  * Source on Github http://github.com/Seldaek/php-console
  */
-$(function() {
+(function() {
 
-    var updateStatusBar, handleKeyPress;
+    var updateStatusBar, handleKeyPress, options;
+
+    options = {
+        tab: '    '
+    }
 
     // updates the text of the status bar
     updateStatusBar = function() {
@@ -35,12 +39,12 @@ $(function() {
     };
 
     handleKeyPress = function(e) {
-        var caret, part, matches;
+        var caret, part, matches, re;
         switch(e.keyCode) {
         case 9:
             // add 4 spaces when tab is pressed
             e.preventDefault();
-            $(this).injectText("    ");
+            $(this).injectText(options.tab);
             break;
         case 13:
             // submit form on ctrl-enter or alt-enter
@@ -53,7 +57,7 @@ $(function() {
             // indent automatically the new lines
             caret = $(this).getCaret();
             part = $(this).val().substr(0, caret);
-            matches = part.match(/(\n +)[^\r\n]*$/);
+            matches = part.match(/(\n[ \t]+)[^\r\n]*$/);
             if (matches) {
                 $(this).val(function(idx, val) {
                     return val.substring(0, caret) + matches[1] + val.substring(caret);
@@ -66,11 +70,12 @@ $(function() {
             // deindent automatically on backspace
             caret = $(this).getCaret();
             part = $(this).val().substr(0, caret);
-            if (part.match(/\n( {4,})$/)) {
+            re = new RegExp('\n[ \t]*?'+options.tab+'$');
+            if (part.match(re)) {
                 $(this).val(function(idx, val) {
-                    return val.substring(0, caret - 4) + val.substring(caret);
+                    return val.substring(0, caret - options.tab.length) + val.substring(caret);
                 });
-                $(this).setCaret(caret - 4);
+                $(this).setCaret(caret - options.tab.length);
                 e.preventDefault();
             }
             break;
@@ -79,48 +84,55 @@ $(function() {
         updateStatusBar();
     };
 
-    $('textarea[name="code"]')
-        .keyup(updateStatusBar)
-        .click(updateStatusBar)
-        .focus();
+    $.console = function(settings) {
+        $.extend(options, settings);
 
-    if ($.browser.opera) {
-        $('textarea[name="code"]').keypress(handleKeyPress);
-    } else {
-        $('textarea[name="code"]').keydown(handleKeyPress);
-    }
+        $(function() {
+            $('textarea[name="code"]')
+                .keyup(updateStatusBar)
+                .click(updateStatusBar)
+                .focus();
 
-    updateStatusBar();
-
-    $('input[name="subm"]').keyup(function(e) {
-        // set the focus back to the textarea if pressing tab moved
-        // the focus to the submit button (opera bug)
-        if (e.keyCode === 9) {
-            $('textarea[name="code"]').focus();
-        }
-    });
-
-    $('form').submit(function(e){
-        e.preventDefault();
-        $('div.output').html('<img src="loader.gif" class="loader" alt="" /> Loading ...');
-        $.post('?js=1', $(this).serializeArray(), function(res) {
-            if (res.match(/#end-php-console-output#$/)) {
-                $('div.output').html(res.substring(0, res.length-24));
+            if ($.browser.opera) {
+                $('textarea[name="code"]').keypress(handleKeyPress);
             } else {
-                $('div.output').html(res + "<br /><br /><em>Script ended unexpectedly.</em>");
+                $('textarea[name="code"]').keydown(handleKeyPress);
+            }
+
+            updateStatusBar();
+
+            $('input[name="subm"]').keyup(function(e) {
+                // set the focus back to the textarea if pressing tab moved
+                // the focus to the submit button (opera bug)
+                if (e.keyCode === 9) {
+                    $('textarea[name="code"]').focus();
+                }
+            });
+
+            $('form').submit(function(e){
+                e.preventDefault();
+                $('div.output').html('<img src="loader.gif" class="loader" alt="" /> Loading ...');
+                $.post('?js=1', $(this).serializeArray(), function(res) {
+                    if (res.match(/#end-php-console-output#$/)) {
+                        $('div.output').html(res.substring(0, res.length-24));
+                    } else {
+                        $('div.output').html(res + "<br /><br /><em>Script ended unexpectedly.</em>");
+                    }
+                });
+            });
+
+            // adds a toggle button to expand/collapse all krumo sub-trees at once
+            if ($('.krumo-expand').length > 0) {
+                $('<a class="expand" href="#">Toggle all</a>')
+                    .click(function(e) {
+                        $('div.krumo-element.krumo-expand').each(function(idx, el) {
+                            krumo.toggle(el);
+                        });
+                        e.preventDefault();
+                    })
+                    .prependTo('.output');
             }
         });
-    });
 
-    // adds a toggle button to expand/collapse all krumo sub-trees at once
-    if ($('.krumo-expand').length > 0) {
-        $('<a class="expand" href="#">Toggle all</a>')
-            .click(function(e) {
-                $('div.krumo-element.krumo-expand').each(function(idx, el) {
-                    krumo.toggle(el);
-                });
-                e.preventDefault();
-            })
-            .prependTo('.output');
     }
-});
+}());
