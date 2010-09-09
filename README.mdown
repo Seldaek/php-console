@@ -35,6 +35,7 @@ Changelog
   - Added a status bar with char/line display
   - Added a toggle button to expand/collapse all krumo sub-trees at once
   - Cross-browser compatibility enhancements
+  - Removing a tab (i.e. 4 spaces) on backspace now
 - 1.0.0
   - Initial Public Release
 

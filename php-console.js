@@ -62,6 +62,18 @@ $(function() {
                 e.preventDefault();
             }
             break;
+        case 8:
+            // deindent automatically on backspace
+            caret = $(this).getCaret();
+            part = $(this).val().substr(0, caret);
+            if (part.match(/\n( {4,})$/)) {
+                $(this).val(function(idx, val) {
+                    return val.substring(0, caret - 4) + val.substring(caret);
+                });
+                $(this).setCaret(caret - 4);
+                e.preventDefault();
+            }
+            break;
         }
 
         updateStatusBar();
