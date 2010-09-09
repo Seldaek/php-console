@@ -13,58 +13,70 @@
  */
 $(function() {
 
-    var updateStatusBar;
+    var updateStatusBar, handleKeyPress;
 
     // updates the text of the status bar
     updateStatusBar = function() {
-        var caret, part, matches;
+        var caret, part, matches, charCount, lineCount;
         caret = $('textarea[name="code"]').getCaret();
-        part = $('textarea[name="code"]').val().substring(0, caret);
-        matches = part.match(/(\r?\n)?([^\r\n]*)/g);
+        part = $('textarea[name="code"]').val().substr(0, caret);
+        matches = part.match(/(\n|[^\r\n]*$)/g);
         part = matches.length > 1 ? matches[matches.length - 2] : matches[0];
-        $('.statusbar').text('Line: ' + Math.max(1, matches.length-1) + ', Column: ' + (matches.length > 2 ? part.length : part.length + 1));
+        lineCount = Math.max(1, matches.length);
+        // matched the first char of a line, so matches are only \n's
+        if (part === "" || part === "\r\n" || part === "\n") {
+            charCount = 1;
+        } else {
+            // matched another char, so we've got the current line as the next-to-last match
+            charCount = part.length + 1;
+            lineCount--;
+        }
+        $('.statusbar').text('Line: ' + lineCount + ', Column: ' + charCount);
+    };
+
+    handleKeyPress = function(e) {
+        var caret, part, matches;
+        switch(e.keyCode) {
+        case 9:
+            // add 4 spaces when tab is pressed
+            e.preventDefault();
+            $(this).injectText("    ");
+            break;
+        case 13:
+            // submit form on ctrl-enter or alt-enter
+            if (e.metaKey || e.altKey) {
+                e.preventDefault();
+                $('form').submit();
+                return;
+            }
+
+            // indent automatically the new lines
+            caret = $(this).getCaret();
+            part = $(this).val().substr(0, caret);
+            matches = part.match(/(\n +)[^\r\n]*$/);
+            if (matches) {
+                $(this).val(function(idx, val) {
+                    return val.substring(0, caret) + matches[1] + val.substring(caret);
+                });
+                $(this).setCaret(caret + matches[1].length);
+                e.preventDefault();
+            }
+            break;
+        }
+
+        updateStatusBar();
     };
 
     $('textarea[name="code"]')
-        .keydown(function(e) {
-            var caret, part, matches;
-            switch(e.keyCode) {
-            case 9:
-                // add 4 spaces when tab is pressed
-                e.preventDefault();
-                $(this).injectText("    ");
-                break;
-            case 13:
-                // submit form on ctrl-enter or alt-enter
-                if (e.metaKey || e.altKey) {
-                    e.preventDefault();
-                    $('form').submit();
-                    return;
-                }
-
-                // indent automatically the new lines
-                // skip because buggy in opera until they fix the preventDefault bug
-                if ($.browser.opera) {
-                    return;
-                }
-                caret = $(this).getCaret();
-                part = $(this).val().substring(0, caret);
-                matches = part.match(/(\r?\n +)[^\r\n]*$/);
-                if (matches) {
-                    $(this).val(function(idx, val) {
-                        return val.substring(0, caret) + matches[1] + val.substring(caret);
-                    });
-                    $(this).setCaret(caret + matches[1].length);
-                    e.preventDefault();
-                }
-                break;
-            }
-
-            updateStatusBar();
-        })
         .keyup(updateStatusBar)
         .click(updateStatusBar)
         .focus();
+
+    if ($.browser.opera) {
+        $('textarea[name="code"]').keypress(handleKeyPress);
+    } else {
+        $('textarea[name="code"]').keydown(handleKeyPress);
+    }
 
     updateStatusBar();
 

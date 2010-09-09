@@ -16,7 +16,6 @@
  * Source on Github http://github.com/Seldaek/jquery-selections
  */
 (function($) {
-
     /**
      * sets the caret position
      *
@@ -24,8 +23,19 @@
      * @see $.fn.setSelection
      */
     $.fn.setCaret = function(index) {
+        var range, elem;
+        elem = this.get(0);
+
+        if ($.browser.opera) {
+            match = this.val().match(/\n/g);
+            if (match) {
+                newlines = match.length;
+                index += newlines;
+            }
+        }
+
         this.setSelection(index);
-    }
+    };
 
     /**
      * returns the caret position, or 0 if the element has no caret
@@ -33,28 +43,58 @@
      * @return int
      */
     $.fn.getCaret = function() {
-        var elem, range, elemRange, elemRangeCopy;
+        var elem, range, elemRange, elemRangeCopy, value, caret, pos;
         elem = this.get(0);
 
+        value = $(elem).val();
+
+        // standard browsers
         if (elem.selectionStart) {
-            return elem.selectionStart;
+            caret = elem.selectionStart;
         } else if (document.selection) {
+            // old IE handling
             elem.focus();
-
             range = document.selection.createRange();
-            if (range === null) {
-                return 0;
+
+            // handle input texts
+            if (elem.nodeName === 'INPUT') {
+                elemRange = elem.createTextRange();
+                elemRangeCopy = elemRange.duplicate();
+                elemRange.moveToBookmark(range.getBookmark());
+                elemRangeCopy.setEndPoint('EndToStart', elemRange);
+                caret = elemRangeCopy.text.length;
+            } else {
+                // handle textareas
+                elemRangeCopy = range.duplicate();
+                elemRangeCopy.moveToElementText(elem);
+
+                pos = 0;
+                if (range.text.length > 1) {
+                    pos = Math.max(0, pos - range.text.length);
+                }
+
+                caret = -1 + pos;
+                elemRangeCopy .moveStart('character', pos);
+
+                while (elemRangeCopy.inRange(range)) {
+                    elemRangeCopy.moveStart('character');
+                    caret++;
+                }
             }
-
-            elemRange = elem.createTextRange(),
-            elemRangeCopy = elemRange.duplicate();
-            elemRange.moveToBookmark(range.getBookmark());
-            elemRangeCopy.setEndPoint('EndToStart', elemRange);
-
-            return elemRangeCopy.text.length;
+        } else {
+            caret = 0;
         }
 
-        return 0;
+        if ($.browser.opera) {
+            value = value.replace(/\r?\n/g, "\r\n").substr(0, caret);
+            match = value.match(/\r\n/g);
+            if (match) {
+                newlines = match.length;
+                caret -= newlines;
+            }
+        }
+
+        return caret;
     };
 
     /**
@@ -69,15 +109,66 @@
         elem = this.get(0);
         end = end || start;
 
+        // standard browsers
         if (elem.setSelectionRange) {
             elem.focus();
             elem.setSelectionRange(start, end);
         } else if (elem.createTextRange) {
+            // old IE handling
             range = elem.createTextRange();
             range.collapse(true);
             range.moveEnd('character', end);
             range.moveStart('character', start);
             range.select();
+        }
+
+        return this;
+    };
+
+    /**
+     * reads the text the user selected
+     *
+     * @param int start index of the beginning of the selection
+     * @param int end index of the end of the selection
+     * @return string
+     */
+    $.fn.getSelectedText = function() {
+        var elem = this.get(0);
+
+        // standard browsers
+        if (elem.selectionStart) {
+            return elem.value.substr(elem.selectionStart, elem.selectionEnd);
+        }
+
+        // old IE
+        if (document.selection) {
+            elem.focus();
+            return document.selection.createRange().text;
+        }
+
+        return '';
+    };
+
+    /**
+     * injects the given text in place of the current selection
+     *
+     * @param string text
+     * @return object chainable
+     */
+    $.fn.replaceSelection = function(text) {
+        var elem = this.get(0);
+
+        // standard browsers
+        if (elem.selectionStart) {
+            elem.value = elem.value.substr(0, elem.selectionStart) + text + elem.value.substr(elem.selectionEnd, elem.value.length);
+            return this;
+        }
+
+        // old IE
+        if (document.selection) {
+            elem.focus();
+            document.selection.createRange().text = text;
+            return this;
         }
 
         return this;
@@ -99,6 +190,5 @@
         $elem.setCaret(caret + text.length);
 
         return this;
-    }
-
+    };
 }(jQuery));
