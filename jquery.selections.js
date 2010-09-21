@@ -23,18 +23,7 @@
      * @see $.fn.setSelection
      */
     $.fn.setCaret = function(index) {
-        var range, elem;
-        elem = this.get(0);
-
-        if ($.browser.opera) {
-            match = this.val().match(/\n/g);
-            if (match) {
-                newlines = match.length;
-                index += newlines;
-            }
-        }
-
-        this.setSelection(index);
+        this.setSelection(index, index);
     };
 
     /**
@@ -43,7 +32,7 @@
      * @return int
      */
     $.fn.getCaret = function() {
-        var elem, range, elemRange, elemRangeCopy, value, caret, pos;
+        var elem, range, elemRange, elemRangeCopy, value, caret, pos, match;
         elem = this.get(0);
 
         value = $(elem).val();
@@ -86,11 +75,9 @@
         }
 
         if ($.browser.opera) {
-            value = value.replace(/\r?\n/g, "\r\n").substr(0, caret);
-            match = value.match(/\r\n/g);
+            match = value.replace(/\r?\n/g, "\r\n").substr(0, caret).match(/\r\n/g);
             if (match) {
-                newlines = match.length;
-                caret -= newlines;
+                caret -= match.length;
             }
         }
 
@@ -105,13 +92,24 @@
      * @return object chainable
      */
     $.fn.setSelection = function(start, end) {
-        var elem, range;
+        var elem, range, match;
         elem = this.get(0);
         end = end || start;
 
         // standard browsers
         if (elem.setSelectionRange) {
             elem.focus();
+
+            if ($.browser.opera) {
+                match = this.val().replace(/\r?\n/g, "\n").substr(0, start).match(/\n/g);
+                if (match) {
+                    start += match.length;
+                }
+                match = this.val().replace(/\r?\n/g, "\n").substr(0, end).match(/\n/g);
+                if (match) {
+                    end += match.length;
+                }
+            }
             elem.setSelectionRange(start, end);
         } else if (elem.createTextRange) {
             // old IE handling
@@ -137,7 +135,7 @@
 
         // standard browsers
         if (elem.selectionStart) {
-            return elem.value.substr(elem.selectionStart, elem.selectionEnd);
+            return elem.value.substring(elem.selectionStart, elem.selectionEnd);
         }
 
         // old IE
@@ -160,7 +158,7 @@
 
         // standard browsers
         if (elem.selectionStart) {
-            elem.value = elem.value.substr(0, elem.selectionStart) + text + elem.value.substr(elem.selectionEnd, elem.value.length);
+            elem.value = elem.value.substr(0, elem.selectionStart) + text + elem.value.substr(elem.selectionEnd);
             return this;
         }
 
