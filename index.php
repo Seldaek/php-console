@@ -52,7 +52,9 @@ if (isset($_POST['code'])) {
     }
 
     ob_start();
-    eval($code);
+    $handle = fopen("eval.php", "w");
+    fwrite($handle, '<?php '. stripslashes($code));
+    include('eval.php');
     $debugOutput = ob_get_clean();
 
     if (isset($_GET['js'])) {
