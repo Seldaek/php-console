@@ -35,6 +35,10 @@ $debugOutput = '';
 if (isset($_POST['code'])) {
     $code = $_POST['code'];
 
+    if (get_magic_quotes_gpc()) {
+        $code = stripslashes($code);
+    }
+
     // if there's only one line wrap it into a krumo() call
     if (preg_match('#^(?!var_dump|echo|print|< )([^\r\n]+?);?\s*$#is', $code, $m) && trim($m[1])) {
         $code = 'krumo('.$m[1].');';
