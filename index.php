@@ -66,6 +66,20 @@ if (isset($_POST['code'])) {
     }
 }
 
+function getPluginsFiles($extension){
+    $result = '';
+    foreach(glob(__DIR__ . '/plugins/*', GLOB_ONLYDIR) as $plugin){
+        foreach(glob("$plugin/$extension/*.$extension", GLOB_ERR) as $filename){
+            $result[] = str_replace(realpath(__DIR__), '', $filename);
+        }
+    }
+    return $result;
+}
+
+foreach(getPluginsFiles('php') as $file){
+    require_once(".$file");
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -76,6 +90,12 @@ if (isset($_POST['code'])) {
         <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
         <script type="text/javascript" src="jquery.selections.js"></script>
         <script type="text/javascript" src="php-console.js"></script>
+<?php foreach(getPluginsFiles('js') as $file){
+    echo "\t<script type='text/javascript' src='.$file'></script>\n";
+} ?>
+<?php foreach(getPluginsFiles('css') as $file){
+    echo "\t<link rel='stylesheet' type='text/css' href='.$file' />\n";
+} ?>
         <script type="text/javascript">
             $.console({
                 tab: <?php echo json_encode($options['tab']) ?>
