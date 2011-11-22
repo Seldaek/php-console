@@ -1,41 +1,33 @@
-var ronanKeyNumber = 91; // SuperKey, the one with the (tm) Windows logo
-
 $(document).ready(function() {
 
-    var ronanNotify = function(msg){
+    var notify = function(msg){
         alert(msg);// ... jQuery notification, anyone ?
     }
 
-    var ronanCheckPhpCode = function(e){
+    var checkPhpCode = function(e){
         var url = "./plugins/ronan/php/ronan.php";
         var code = $.trim($('textarea[name="code"]').val());
         if('' != $.trim(code)){
             code = "<?php "  + code + " ?>";
             $.post(url, {'code':code}, function(result) {
-                ronanNotify(result);
+                notify(result);
             });
         } else {
-            ronanNotify('Nothing to check');
+            notify('Nothing to check');
         }
     }
 
-    var ronanHandleKeyPress = function(e) {
-        if(ronanKeyNumber == e.keyCode) {
-            ronanCheckPhpCode();
-        }
-    }
+    shortcut.add("Ctrl+Shift+L",function() {
+        checkPhpCode();
+    });
 
-    $('.ronanBtn').live('click', function(e){
-        ronanCheckPhpCode();
+
+    $('.Btn').live('click', function(e){
+        checkPhpCode();
         e.preventDefault();
     });
 
     var button = "<button class='ronanBtn' title='keyboard shortcut: SuperKey '>check PHP code</button>";
     $('input[type=submit]').before(button);
-    if ($.browser.opera) {
-        $('body').keypress(ronanHandleKeyPress);
-    } else {
-        $('body').keydown(ronanHandleKeyPress);
-    }
 
 });

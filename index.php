@@ -68,10 +68,8 @@ if (isset($_POST['code'])) {
 
 function getPluginsFiles($extension){
     $result = '';
-    foreach(glob(__DIR__ . '/plugins/*', GLOB_ONLYDIR) as $plugin){
-        foreach(glob("$plugin/$extension/*.$extension", GLOB_ERR) as $filename){
-            $result[] = str_replace(realpath(__DIR__), '', $filename);
-        }
+    foreach(glob(__DIR__."/plugins/*/$extension/*.".$extension) as $filename){
+        $result[] = str_replace(realpath(__DIR__), '', $filename);
     }
     return $result;
 }
