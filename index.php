@@ -2,7 +2,7 @@
 
 $options = array(
     // which string should represent a tab for indentation
-    'tabsize' => 3,
+    'tabsize' => 4,
 );
 
 /**
