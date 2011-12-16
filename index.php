@@ -73,10 +73,9 @@ if (isset($_POST['code'])) {
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <title>Debug Console</title>
         <link rel="stylesheet" type="text/css" href="styles.css" />
-        <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
-        <script type="text/javascript" src="jquery.selections.js"></script>
-        <script type="text/javascript" src="ace.js"></script>
-        <script type="text/javascript" src="mode-php.js"></script>
+        <script type="text/javascript" src="jquery-1.7.1.min.js"></script>
+        <script type="text/javascript" src="ace/ace.js"></script>
+        <script type="text/javascript" src="ace/mode-php.js"></script>
         <script type="text/javascript" src="php-console.js"></script>
         <script type="text/javascript">
             $.console({
@@ -94,13 +93,13 @@ if (isset($_POST['code'])) {
                     <span class="position">Line: 1, Column: 1</span>
                     <span class="copy">
                         Copy selection: <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="110" height="14" id="clippy">
-                            <param name="movie" value="clippy.swf"/>
+                            <param name="movie" value="clippy/clippy.swf"/>
                             <param name="allowScriptAccess" value="always" />
                             <param name="quality" value="high" />
                             <param name="scale" value="noscale" />
                             <param NAME="FlashVars" value="text=">
                             <param name="bgcolor" value="#E8E8E8">
-                            <embed src="clippy.swf"
+                            <embed src="clippy/clippy.swf"
                                    width="110"
                                    height="14"
                                    name="clippy"
