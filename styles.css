@@ -28,16 +28,31 @@ a {
 
 .output {
     padding: 5px 10px;
-    margin: 10px .4%;
+    margin: 10px;
 }
 
 .input {
     margin: .5% 10px;
-    padding: 2px 5px;
 }
 
 .statusbar {
-    margin-top: 3px;
+    padding: 3px 5px;
+    background: #E8E8E8;
+    -webkit-border-bottom-left-radius: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    border-bottom-left-radius: 5px;
+    -webkit-border-bottom-right-radius: 5px;
+    -moz-border-radius-bottomright: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.statusbar .copy {
+    margin-left: 50px;
+}
+#clippy {
+    position: relative;
+    top: 2px;
+    left: 0;
 }
 
 /* ace-editor requires to define styles by id (specificity) */
@@ -45,6 +60,14 @@ a {
     width: 100%;
     height: 400px;
     position: relative;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topright: 5px;
+    border-top-right-radius: 5px;
+}
+#editor .ace_gutter {
+    -webkit-border-top-left-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    border-top-left-radius: 5px;
 }
 
 .output img.loader {

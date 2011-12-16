@@ -90,7 +90,30 @@ if (isset($_POST['code'])) {
 
             <div class="input">
                 <div class="editor" id="editor"><?php echo (isset($_POST['code']) ? htmlentities($_POST['code'], ENT_QUOTES, 'UTF-8') : null) ?></div>
-                <div class="statusbar">Line: 1, Column: 1</div>
+                <div class="statusbar">
+                    <span class="position">Line: 1, Column: 1</span>
+                    <span class="copy">
+                        Copy selection: <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="110" height="14" id="clippy">
+                            <param name="movie" value="clippy.swf"/>
+                            <param name="allowScriptAccess" value="always" />
+                            <param name="quality" value="high" />
+                            <param name="scale" value="noscale" />
+                            <param NAME="FlashVars" value="text=">
+                            <param name="bgcolor" value="#E8E8E8">
+                            <embed src="clippy.swf"
+                                   width="110"
+                                   height="14"
+                                   name="clippy"
+                                   quality="high"
+                                   allowScriptAccess="always"
+                                   type="application/x-shockwave-flash"
+                                   pluginspage="http://www.macromedia.com/go/getflashplayer"
+                                   FlashVars="text="
+                                   bgcolor="#E8E8E8"
+                            />
+                        </object>
+                    </span>
+                </div>
             </div>
             <input type="submit" name="subm" value="Try this!" />
         </form>

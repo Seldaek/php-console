@@ -25,7 +25,17 @@
      */
     updateStatusBar = function(e) {
         var cursor_position = editor.getCursorPosition();
-        $('.statusbar').text('Line: ' + (1+cursor_position.row) + ', Column: ' + cursor_position.column);
+        $('.statusbar .position').text('Line: ' + (1+cursor_position.row) + ', Column: ' + cursor_position.column);
+    };
+
+    /**
+     * prepares a clippy button for clipboard access
+     */
+    prepareClippyButton = function(e) {
+        var selection = editor.getSession().doc.getTextRange(editor.getSelectionRange());
+        $('#clippy embed').attr('FlashVars', 'text=' + selection);
+        $('#clippy param[name="FlashVars"]').attr('value', 'text=' + selection);
+        $('.statusbar .copy').html($('.statusbar .copy').html());
     };
 
     /**
@@ -70,9 +80,11 @@
 
         // tab size
         editor.getSession().setTabSize(options.tabsize);
+        editor.getSession().setUseSoftTabs(true);
 
         // events
         editor.getSession().selection.on('changeCursor', updateStatusBar);
+        editor.getSession().selection.on('changeSelection', prepareClippyButton);
 
         // commands
         editor.commands.addCommand({
@@ -88,7 +100,6 @@
         });
     };
 
-
     $.console = function(settings) {
         $.extend(options, settings);
 
@@ -96,15 +107,6 @@
             $(document).ready(initializeAce);
 
             $('form').submit(handleSubmit);
-/*
-            // set the focus back to the textarea if pressing tab moved
-            // the focus to the submit button (opera bug)
-            $('input[name="subm"]').keyup(function(e) {
-                if (e.keyCode === 9) {
-                    $('textarea[name="code"]').focus();
-                }
-            });
-            */
         });
     };
 }());
