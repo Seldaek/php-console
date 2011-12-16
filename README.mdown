@@ -17,14 +17,10 @@ Setup
 
 Clone the git repo or download it as a zip/tarball, drop it somewhere in your local web document root and access it with http://localhost/path/to/php-console
 
-Contribute
-----------
+Contributing
+------------
 
-If you like this piece of software, please consider contributing back with Flattr or Pledgie:
-
-<a href="http://flattr.com/thing/55112/PHP-Web-Debug-Console" target="_blank"><img src="http://api.flattr.com/button/button-static-50x60.png" title="Flattr this" border="0" /></a> <a href="http://pledgie.com/campaigns/12919"><img alt="Click here to lend your support to slippy and make a donation via pledgie.com !" src="http://www.pledgie.com/campaigns/12919.png?skin_name=chrome" border="0" /></a>
-
-Code contributions or ideas are obviously also much welcome.
+Code contributions or ideas are obviously much welcome. Send pull requests or issues on github.
 
 Author
 ------
@@ -35,6 +31,10 @@ Jordi Boggiano - <j.boggiano@seld.be><br />
 Changelog
 ---------
 
+- 1.2.0
+  - Replaced built-in editor with [ACE editor](http://ace.ajax.org/) which provides highlighting and
+    [other features](https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts)
+  - Handle old setups with magic_quotes enabled
 - 1.1.2
   - Fixed issue with IPv6 loopback not being whitelisted
 - 1.1.1
@@ -59,7 +59,9 @@ New BSD License - see the LICENSE file for details
 Acknowledgements
 ----------------
 
-PHP Console bundles the following libraries, and the work of their respective author is very much appreciated:
+PHP Console bundles the following libraries, and the work of their respective authors is very much appreciated:
 
 - [krumo](http://krumo.sourceforge.net/) licensed under the LGPL
 - [jQuery](http://jquery.com) licensed under the MIT License
+- [ACE](http://ace.ajax.org/) licensed under the MPL/LGPL/GPL Licenses
+- [Clippy](https://github.com/mojombo/clippy) licensed under the MIT License
