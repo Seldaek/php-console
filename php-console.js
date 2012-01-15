@@ -95,7 +95,9 @@
 
         // events
         editor.getSession().selection.on('changeCursor', updateStatusBar);
-        editor.getSession().selection.on('changeSelection', prepareClippyButton);
+        if (window.navigator.userAgent.indexOf('Opera/') === 0) {
+            editor.getSession().selection.on('changeSelection', prepareClippyButton);
+        }
 
         // commands
         editor.commands.addCommand({
