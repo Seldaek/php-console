@@ -33,9 +33,13 @@
      */
     prepareClippyButton = function(e) {
         var selection = editor.getSession().doc.getTextRange(editor.getSelectionRange());
+        if (!selection) {
+            $('.statusbar .copy').hide();
+            return;
+        }
         $('#clippy embed').attr('FlashVars', 'text=' + selection);
         $('#clippy param[name="FlashVars"]').attr('value', 'text=' + selection);
-        $('.statusbar .copy').html($('.statusbar .copy').html());
+        $('.statusbar .copy').html($('.statusbar .copy').html()).show();
     };
 
     /**
