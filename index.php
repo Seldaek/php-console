@@ -74,11 +74,11 @@ if (isset($_POST['code'])) {
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <title>Debug Console</title>
         <link rel="stylesheet" type="text/css" href="styles.css" />
-        <script type="text/javascript" src="jquery-1.7.1.min.js"></script>
-        <script type="text/javascript" src="ace/ace.js"></script>
-        <script type="text/javascript" src="ace/mode-php.js"></script>
-        <script type="text/javascript" src="php-console.js"></script>
-        <script type="text/javascript">
+        <script src="jquery-1.7.1.min.js"></script>
+        <script src="ace/ace.js"></script>
+        <script src="ace/mode-php.js"></script>
+        <script src="php-console.js"></script>
+        <script>
             $.console({
                 tabsize: <?php echo json_encode($options['tabsize']) ?>
             });

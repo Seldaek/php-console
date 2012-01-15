@@ -11,10 +11,11 @@
  *
  * Source on Github http://github.com/Seldaek/php-console
  */
-(function() {
+(function(require, $, ace) {
+    "use strict";
 
-    var updateStatusBar, handleKeyPress, options, editor;
-
+    var updateStatusBar, prepareClippyButton, refreshKrumoState, handleSubmit, initializeAce,
+        options, editor;
     options = {
         tabsize: 4,
         editor: 'editor'
@@ -50,7 +51,7 @@
             $('<a class="expand" href="#">Toggle all</a>')
                 .click(function(e) {
                     $('div.krumo-element.krumo-expand').each(function(idx, el) {
-                        krumo.toggle(el);
+                        window.krumo.toggle(el);
                     });
                     e.preventDefault();
                 })
@@ -122,4 +123,4 @@
             $('form').submit(handleSubmit);
         });
     };
-}());
+}(require, jQuery, ace));
