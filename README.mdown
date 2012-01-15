@@ -31,6 +31,9 @@ Jordi Boggiano - <j.boggiano@seld.be><br />
 Changelog
 ---------
 
+- 1.2.1
+  - Performance fixes for ACE editor integration
+  - JS is no longer a requirement
 - 1.2.0
   - Replaced built-in editor with [ACE editor](http://ace.ajax.org/) which provides highlighting and
     [other features](https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts)
