@@ -87,9 +87,8 @@ if (isset($_POST['code'])) {
     <body>
         <div class="output"><?php echo $debugOutput ?></div>
         <form method="POST" action="">
-
             <div class="input">
-                <div class="editor" id="editor"><?php echo (isset($_POST['code']) ? htmlentities($_POST['code'], ENT_QUOTES, 'UTF-8') : null) ?></div>
+                <textarea class="editor" id="editor" name="code"><?php echo (isset($_POST['code']) ? htmlentities($_POST['code'], ENT_QUOTES, 'UTF-8') : null) ?></textarea>
                 <div class="statusbar">
                     <span class="position">Line: 1, Column: 1</span>
                     <span class="copy">

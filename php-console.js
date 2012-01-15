@@ -72,10 +72,17 @@
     };
 
     initializeAce = function() {
+        var PhpMode, code;
+
+        code = $('#' + options.editor).text();
+        $('#' + options.editor)
+            .replaceWith('<div id="'+options.editor+'" class="'+options.editor+'"></div>')
+            .text(code);
+
         editor = ace.edit(options.editor);
 
         // set mode
-        var PhpMode = require("ace/mode/php").Mode;
+        PhpMode = require("ace/mode/php").Mode;
         editor.getSession().setMode(new PhpMode());
 
         // tab size
