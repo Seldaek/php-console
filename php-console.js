@@ -66,7 +66,9 @@
         e.preventDefault();
         $('div.output').html('<img src="loader.gif" class="loader" alt="" /> Loading ...');
 
-        $.post('?js=1', { code: editor.getSession().getValue() }, function(res) {
+        var params = '?js=1&' + window.location.href.slice(window.location.href.indexOf('?') + 1);
+
+        $.post(params, { code: editor.getSession().getValue() }, function(res) {
             if (res.match(/#end-php-console-output#$/)) {
                 $('div.output').html(res.substring(0, res.length-24));
             } else {

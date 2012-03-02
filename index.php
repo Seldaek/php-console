@@ -1,25 +1,43 @@
 <?php
 
+ini_set('display_errors', 1);
+
 $options = array(
     // which string should represent a tab for indentation
     'tabsize' => 4,
 );
 
-$includePath = array();
-$includePath[] = '.';
-$includePath[] = 'lib/Zend';
-$includePath[] = get_include_path();
-$includePath = implode(PATH_SEPARATOR,$includePath);
-set_include_path($includePath);
-
-//var_dump(get_include_path());die;
-
-require_once 'Zend/Loader.php';
-
-Zend_Loader::registerAutoLoad('Zend_Loader',true);
 
 
+require_once 'lib/TFSN/Projects.php';
+require_once 'lib/TFSN/Get.php';
+require_once 'lib/TFSN/CommandLine.php';
 
+$get = new Get();
+$params = $get->getParams();
+
+$commandLine = new CommandLine();
+$projects = new Projects();
+
+
+$content = $errors = '';
+
+$content .= '<h1>Projects</h1>';
+$content .= $projects->renderProjects();
+
+$siteDirectory = '';
+if(array_key_exists('a', $params) && $params['a'] == 'debug' && array_key_exists('site', $params)){
+    $site = $params['site'];
+    $siteDirectory = $projects->getDirectoryFromSiteName($site);
+
+    require_once $siteDirectory . 'app/Mage.php';
+    Varien_Profiler::enable();
+    Mage::setIsDeveloperMode(true);
+    umask(0);
+    Mage::app();
+
+
+}
 /**
  * PHP Console
  *
@@ -41,7 +59,6 @@ if (!in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'), true)) {
 define('PHP_CONSOLE_VERSION', '1.3.0-dev');
 require 'krumo/class.krumo.php';
 
-ini_set('log_errors', 0);
 ini_set('display_errors', 1);
 error_reporting(E_ALL | E_STRICT);
 
@@ -100,6 +117,9 @@ if (isset($_POST['code'])) {
         </script>
     </head>
     <body>
+        <div>
+            <?php echo $content; ?>
+        </div>
         <div class="output"><?php echo $debugOutput ?></div>
         <form method="POST" action="">
             <div class="input">
