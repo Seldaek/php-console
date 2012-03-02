@@ -64,7 +64,7 @@
      */
     handleSubmit = function(e) {
         e.preventDefault();
-        $('div.output').html('<img src="loader.gif" class="loader" alt="" /> Loading ...');
+        $('div.output').html('<img src="../img/loader.gif" class="loader" alt="" /> Loading ...');
 
         var params = '?js=1&' + window.location.href.slice(window.location.href.indexOf('?') + 1);
 

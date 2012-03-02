@@ -105,11 +105,11 @@ if (isset($_POST['code'])) {
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <title>Debug Console</title>
-        <link rel="stylesheet" type="text/css" href="styles.css" />
-        <script src="jquery-1.7.1.min.js"></script>
-        <script src="ace/ace.js"></script>
-        <script src="ace/mode-php.js"></script>
-        <script src="php-console.js"></script>
+        <link rel="stylesheet" type="text/css" href="./assets/styles/styles.css" />
+        <script src="./assets/js/jquery-1.7.1.min.js"></script>
+        <script src="./assets/js/ace/ace.js"></script>
+        <script src="./assets/js/ace/mode-php.js"></script>
+        <script src="./assets/js/php-console.js"></script>
         <script>
             $.console({
                 tabsize: <?php echo json_encode($options['tabsize']) ?>
@@ -169,9 +169,6 @@ if (isset($_POST['code'])) {
             press ctrl-enter to submit
             put '#\n' on the first line to enforce
                 \n line breaks (\r\n etc work too)
-        </div>
-        <div class="footer">
-            php-console v<?php echo PHP_CONSOLE_VERSION ?> - by <a href="http://seld.be/">Jordi Boggiano</a> - <a href="http://github.com/Seldaek/php-console">sources on github</a>
         </div>
 
         <script type="text/javascript">
