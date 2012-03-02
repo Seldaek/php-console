@@ -20,10 +20,8 @@ $commandLine = new CommandLine();
 $projects = new Projects();
 
 
-$content = $errors = '';
-
-$content .= (array_key_exists('site', $params) ? '<h3>Current Project: ' . $params['site'] . '</h3>': '<h3>Projects:</h3>');
-$content .= '<h3 id="slideToggle"><span id="expand-icon" class="icon-plus-sign"></span>Other Projects: </h3><div id="expandable" style="display: none">' . $projects->renderProjects() . '</div>';
+$content = $title = $errors = '';
+$content .= '<h3 id="slideToggle"><i id="expand-icon" class="icon-plus-sign"></i>Other Projects: </h3><div id="expandable" style="display: none">' . $projects->renderProjects() . '</div>';
 
 $siteDirectory = '';
 if(array_key_exists('a', $params) && $params['a'] == 'debug' && array_key_exists('site', $params)){
@@ -35,6 +33,7 @@ if(array_key_exists('a', $params) && $params['a'] == 'debug' && array_key_exists
     Mage::setIsDeveloperMode(true);
     umask(0);
     Mage::app();
+    $title = (array_key_exists('site', $params) ? $params['site'] . '(' . Mage::app()->getStore()->getName() . ')': '');
 
 
 }
@@ -104,12 +103,17 @@ if (isset($_POST['code'])) {
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>Debug Console</title>
+        <title>Magento/Zend/PHP Debug Console</title>
         <link rel="stylesheet" type="text/css" href="./assets/styles/styles.css" />
+        <link rel="stylesheet" type="text/css" href="./assets/styles/bootstrap.css" />
+        <link rel="stylesheet" type="text/css" href="./assets/styles/bootstrap-responsive.css" />
+        <link rel="stylesheet" type="text/css" href="./assets/styles/docs.css" />
         <script src="./assets/js/jquery-1.7.1.min.js"></script>
         <script src="./assets/js/ace/ace.js"></script>
         <script src="./assets/js/ace/mode-php.js"></script>
         <script src="./assets/js/php-console.js"></script>
+        <script src="./assets/js/google-code-prettify/prettify.js"></script>
+        <link rel="stylesheet" type="text/css" href="./assets/js/google-code-prettify/prettify.css" />
         <script>
             $.console({
                 tabsize: <?php echo json_encode($options['tabsize']) ?>
@@ -117,7 +121,16 @@ if (isset($_POST['code'])) {
         </script>
     </head>
     <body>
+
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="brand" href="./index.php">TFSN</a>
+                </div>
+            </div>
+        </div>
         <div>
+            <h1><?php echo ($title != '') ? $title . '<a class="" href="./index.php"><i class="icon icon-remove-sign"></i></a>' : ''; ?></h1>
             <?php echo $content; ?>
         </div>
         <div class="output"><pre><?php echo $debugOutput ?></pre></div>
@@ -149,7 +162,7 @@ if (isset($_POST['code'])) {
                     </span>
                 </div>
             </div>
-            <input type="submit" name="subm" value="Try this!" />
+            <input id="try-this" type="submit" name="subm" value="Try this!" />
         </form>
         <div class="help">
         debug:

@@ -64,13 +64,13 @@
      */
     handleSubmit = function(e) {
         e.preventDefault();
-        $('div.output').html('<img src="../img/loader.gif" class="loader" alt="" /> Loading ...');
+        $('div.output').html('<img src="../assets/img/loader.gif" class="loader" alt="" /> Loading ...');
 
         var params = '?js=1&' + window.location.href.slice(window.location.href.indexOf('?') + 1);
 
         $.post(params, { code: editor.getSession().getValue() }, function(res) {
             if (res.match(/#end-php-console-output#$/)) {
-                $('div.output').html('<pre>' + res.substring(0, res.length-24) + '</pre>');
+                $('div.output').html('<pre class="prettyprint linenums">' + res.substring(0, res.length-24) + '</pre>');
             } else {
                 $('div.output').html(res + "<br /><br /><em>Script ended unexpectedly.</em>");
             }

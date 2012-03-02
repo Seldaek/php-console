@@ -6,7 +6,8 @@ body {
     background: #eee;
 }
 
-input {
+input,
+input#try-this {
     width: 99%;
     margin: auto;
     display: block;
@@ -18,7 +19,8 @@ a {
     color: #88f;
 }
 
-.output, .input {
+.output, .input,
+input#try-this {
     border: 1px solid #aaa;
     background: #fff;
     -moz-border-radius: 5px;
@@ -31,7 +33,8 @@ a {
     margin: 10px;
 }
 
-.input {
+.input,
+input#try-this {
     margin: .5% 10px;
 }
 
@@ -79,14 +82,4 @@ a {
     width: 33%;
     float: left;
     white-space: pre;
-}
-
-.footer {
-    width: 100%;
-    clear: left;
-    text-align: center;
-    color: #aaa;
-}
-.footer a {
-    color: #aaa;
 }
