@@ -5,6 +5,21 @@ $options = array(
     'tabsize' => 4,
 );
 
+$includePath = array();
+$includePath[] = '.';
+$includePath[] = 'lib/Zend';
+$includePath[] = get_include_path();
+$includePath = implode(PATH_SEPARATOR,$includePath);
+set_include_path($includePath);
+
+//var_dump(get_include_path());die;
+
+require_once 'Zend/Loader.php';
+
+Zend_Loader::registerAutoLoad('Zend_Loader',true);
+
+
+
 /**
  * PHP Console
  *
