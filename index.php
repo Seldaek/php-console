@@ -22,8 +22,8 @@ $projects = new Projects();
 
 $content = $errors = '';
 
-$content .= '<h1>Projects</h1>';
-$content .= $projects->renderProjects();
+$content .= (array_key_exists('site', $params) ? '<h3>Current Project: ' . $params['site'] . '</h3>': '<h3>Projects:</h3>');
+$content .= '<h3 id="slideToggle"><span id="expand-icon" class="icon-plus-sign"></span>Other Projects: </h3><div id="expandable" style="display: none">' . $projects->renderProjects() . '</div>';
 
 $siteDirectory = '';
 if(array_key_exists('a', $params) && $params['a'] == 'debug' && array_key_exists('site', $params)){
@@ -120,7 +120,7 @@ if (isset($_POST['code'])) {
         <div>
             <?php echo $content; ?>
         </div>
-        <div class="output"><?php echo $debugOutput ?></div>
+        <div class="output"><pre><?php echo $debugOutput ?></pre></div>
         <form method="POST" action="">
             <div class="input">
                 <textarea class="editor" id="editor" name="code"><?php echo (isset($_POST['code']) ? htmlentities($_POST['code'], ENT_QUOTES, 'UTF-8') : null) ?></textarea>
@@ -173,5 +173,13 @@ if (isset($_POST['code'])) {
         <div class="footer">
             php-console v<?php echo PHP_CONSOLE_VERSION ?> - by <a href="http://seld.be/">Jordi Boggiano</a> - <a href="http://github.com/Seldaek/php-console">sources on github</a>
         </div>
+
+        <script type="text/javascript">
+
+            $('#slideToggle').click(function() {
+              $('#expandable').slideToggle();
+              $('#expand-icon').toggleClass('icon-minus-sign');
+            });
+        </script>
     </body>
 </html>

@@ -70,7 +70,7 @@
 
         $.post(params, { code: editor.getSession().getValue() }, function(res) {
             if (res.match(/#end-php-console-output#$/)) {
-                $('div.output').html(res.substring(0, res.length-24));
+                $('div.output').html('<pre>' + res.substring(0, res.length-24) + '</pre>');
             } else {
                 $('div.output').html(res + "<br /><br /><em>Script ended unexpectedly.</em>");
             }
