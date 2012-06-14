@@ -104,11 +104,10 @@
         editor.commands.addCommand({
             name: 'submitForm',
             bindKey: {
-                win: 'Ctrl-Enter|Alt-Enter',
-                mac: 'Command-Enter|Alt-Enter',
-                sender: 'editor'
+                win: 'Ctrl-Return|Alt-Return',
+                mac: 'Command-Return|Alt-Return'
             },
-            exec: function(env, args, request) {
+            exec: function(editor) {
                 $('form').submit();
             }
         });
