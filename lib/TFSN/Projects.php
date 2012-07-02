@@ -7,7 +7,7 @@ class Projects {
 
 
     public function __construct(){
-        $this->_directory = realpath(__DIR__) . '/../../../';
+        $this->_directory = realpath(dirname(__FILE__) . '/../../../') . '/';
     }
 
     public function getDirectoryFromSiteName($siteName = null){
