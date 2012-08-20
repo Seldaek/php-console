@@ -26,7 +26,7 @@ TFSN.LocalStorageHelper.prototype = {
     },
 
     getLocalStorage: function(){
-        return (localStorage.getItem(this.localStorageKey)) ? localStorage.getItem(this.localStorageKey) : [];
+        return (localStorage.getItem(this.localStorageKey)) ? localStorage.getItem(this.localStorageKey) : '{}';
     },
 
     checkSnippet: function(ele) {
@@ -46,12 +46,13 @@ TFSN.LocalStorageHelper.prototype = {
     },
 
     loadSaveSnippetsListeners: function(){
-        $('#save-snippet').click(function(){
+        var parent = this;
+        $('#save-snippet').click(function(evt){
             var snippetCode = editor.getSession().getValue();
-            var snippetProject = this.getUrlParam('site');
+            var snippetProject = parent.getUrlParam('site');
             var snippetLabel = prompt('Snippet Name:');
 
-            snippetLabel = (snippetLabel == '') ? this.getTodaysDate() : snippetLabel;
+            snippetLabel = (snippetLabel == '') ? parent.getTodaysDate() : snippetLabel;
 
             var newSnippet = {
                 'snippetCode' : snippetCode,
@@ -59,12 +60,12 @@ TFSN.LocalStorageHelper.prototype = {
                 'snippetLabel' : snippetLabel
             };
 
-            this.arrayOfSnippets = this.getArrayOfStorage();
-            this.arrayOfSnippets.push(newSnippet);
+            parent.arrayOfSnippets = parent.getArrayOfStorage();
+            parent.arrayOfSnippets.push(newSnippet);
 
-            localStorage.setItem(this.localStorageKey, JSON.stringify(this.arrayOfSnippets));
+            localStorage.setItem(parent.localStorageKey, JSON.stringify(parent.arrayOfSnippets));
 
-            this.checkForExistingSnippets();
+            parent.checkForExistingSnippets();
 
 
         });
