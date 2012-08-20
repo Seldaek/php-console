@@ -35,7 +35,8 @@ if(array_key_exists('a', $params) && $params['a'] == 'debug' && array_key_exists
         Mage::setIsDeveloperMode(true);
         umask(0);
         Mage::app();
-        $title = (array_key_exists('site', $params) ? $params['site'] . ' (<a target="_blank" href="' . Mage::app()->getStore()->getBaseUrl() . '">' . Mage::app()->getStore()->getBaseUrl() . '</a>)': '');
+        $title = '<img src="' . Mage::getDesign()->getSkinUrl() . Mage::getStoreConfig('design/header/logo_src') .  '" /><br />';
+        $title .= (array_key_exists('site', $params) ? $params['site'] . ' (<a target="_blank" href="' . Mage::app()->getStore()->getBaseUrl() . '">' . Mage::app()->getStore()->getBaseUrl() . '</a>)': '');
     }
 
 
@@ -103,197 +104,144 @@ if (isset($_POST['code'])) {
 ?>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>Magento/Zend/PHP Debug Console</title>
-        <link rel="stylesheet" type="text/css" href="./assets/styles/styles.css" />
-        <link rel="stylesheet" type="text/css" href="./assets/styles/bootstrap.css" />
-        <link rel="stylesheet" type="text/css" href="./assets/styles/bootstrap-responsive.css" />
-        <link rel="stylesheet" type="text/css" href="./assets/styles/docs.css" />
-        <script src="./assets/js/jquery-1.7.1.min.js"></script>
-        <script src="./assets/js/jquery-tmpl-min.js"></script>
-        <script src="./assets/js/ace/ace.js"></script>
-        <script src="./assets/js/ace/mode-php.js"></script>
-        <script src="./assets/js/php-console.js"></script>
-        <script src="./assets/js/google-code-prettify/prettify.js"></script>
-        <script src="./assets/js/storage.js"></script>
-        <link rel="stylesheet" type="text/css" href="./assets/js/google-code-prettify/prettify.css" />
-        <script>
-            $.console({
-                tabsize: <?php echo json_encode($options['tabsize']) ?>
-            });
-        </script>
-    </head>
-    <body>
-    <div class="container">
-        <div class="navbar navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="brand" href="./index.php">TFSN</a>
-                </div>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Magento/Zend/PHP Debug Console</title>
+    <link rel="stylesheet" type="text/css" href="./assets/styles/styles.css" />
+    <link rel="stylesheet" type="text/css" href="./assets/styles/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="./assets/styles/bootstrap-responsive.css" />
+    <link rel="stylesheet" type="text/css" href="./assets/styles/docs.css" />
+    <script src="./assets/js/jquery-1.7.1.min.js"></script>
+    <script src="./assets/js/jquery-tmpl-min.js"></script>
+    <script src="./assets/js/ace/ace.js"></script>
+    <script src="./assets/js/ace/mode-php.js"></script>
+    <script src="./assets/js/php-console.js"></script>
+    <script src="./assets/js/google-code-prettify/prettify.js"></script>
+    <script src="./assets/js/storage.js"></script>
+    <link rel="stylesheet" type="text/css" href="./assets/js/google-code-prettify/prettify.css" />
+    <script>
+        $.console({
+            tabsize: <?php echo json_encode($options['tabsize']) ?>
+        });
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="brand" href="./index.php">TFSN</a>
             </div>
-        </div>
-        <h1><?php echo ($title != '') ? $title . '<a class="" href="./index.php"><i class="icon icon-remove-sign"></i></a>' : ''; ?></h1>
-        <div class="row">
-            <div class="span6">
-                <?php echo $content; ?>
-            </div>
-            <div class="span6">
-                <h3 id="slideToggleSnippets">
-                    <i id="expand-snippets-icon" class="icon-plus-sign"></i>Snippets: </h3>
-                        <div id="expandable-snippets" style="display: none">
-                            <script id="snippetsTemplate" type="text/x-jQuery-tmpl">
-                                <div>
-                                    <a class="load-snippet" data-project="${snippetProject}" data-label="${snippetLabel}" onClick="checkSnippet(this)">${snippetProject}: ${snippetLabel}</a>
-                                </div>
-                            </script>
-                        </div>
-            </div>
-        </div>
-
-        <div class="output"><pre><?php echo $debugOutput ?></pre></div>
-        <form id="code-form" method="POST" action="">
-            <div class="input">
-                <label for="editor"></label>
-                <textarea class="editor" id="editor" name="code"></textarea>
-                <div class="statusbar">
-                    <span class="position">Line: 1, Column: 1</span>
-                    <span class="copy">
-                        Copy selection: <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="110" height="14" id="clippy">
-                            <param name="movie" value="clippy/clippy.swf"/>
-                            <param name="allowScriptAccess" value="always" />
-                            <param name="quality" value="high" />
-                            <param name="scale" value="noscale" />
-                            <param NAME="FlashVars" value="text=">
-                            <param name="bgcolor" value="#E8E8E8">
-                            <embed src="clippy/clippy.swf"
-                                   width="110"
-                                   height="14"
-                                   name="clippy"
-                                   quality="high"
-                                   allowScriptAccess="always"
-                                   type="application/x-shockwave-flash"
-                                   pluginspage="http://www.macromedia.com/go/getflashplayer"
-                                   FlashVars="text="
-                                   bgcolor="#E8E8E8"
-                            />
-                        </object>
-                    </span>
-                </div>
-            </div>
-            <input id="try-this" type="submit" name="subm" value="Try this!" class="btn btn-large btn-success" />
-            <input id="save-snippet" type="button" name="save-snippet" value="Save Snippet!" class="btn btn-primary" />
-        </form>
-        <div class="help">
-        debug:
-            &lt; foo()
-            krumo(foo());
-        </div>
-        <div class="help">
-        commands:
-            krumo::backtrace();
-            krumo::includes();
-            krumo::functions();
-            krumo::classes();
-            krumo::defines();
-        </div>
-        <div class="help">
-        misc:
-            press ctrl-enter to submit
-            put '#\n' on the first line to enforce
-                \n line breaks (\r\n etc work too)
         </div>
     </div>
+    <h1><?php echo ($title != '') ? $title . '<a class="" href="./index.php"><i class="icon icon-remove-sign"></i></a>' : ''; ?></h1>
+    <div class="row">
+        <div class="span6">
+            <?php echo $content; ?>
+        </div>
+        <div class="span6">
+            <h3 id="slideToggleSnippets">
+                <i id="expand-snippets-icon" class="icon-plus-sign"></i>Snippets: </h3>
+            <div id="expandable-snippets" style="display: none">
+                <script id="snippetsTemplate" type="text/x-jQuery-tmpl">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li class="active row">
+                            <a
+                                class="load-snippet span2"
+                                data-project="${snippetProject}"
+                                data-label="${snippetLabel}"
+                                onClick="TFSN.LocalStorageHelper.checkSnippet(this)"
+                                >
+                                ${snippetProject}: ${snippetLabel}
+                            </a>
+                            <i class="preview-snippet icon-plus-sign"></i>
+                            <pre class="prettyprint linenums span6" style="display: none;">${snippetCode}</pre>
+                        </li>
+            </div>
+            </script>
+        </div>
+    </div>
+</div>
 
-        <script type="text/javascript">
+<div class="output"><pre><?php echo $debugOutput ?></pre></div>
+<form id="code-form" method="POST" action="">
+    <div class="input">
+        <label for="editor"></label>
+        <textarea class="editor" id="editor" name="code"></textarea>
+        <div class="statusbar">
+            <span class="position">Line: 1, Column: 1</span>
+                    <span class="copy">
+                        Copy selection: <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="110" height="14" id="clippy">
+                        <param name="movie" value="clippy/clippy.swf"/>
+                        <param name="allowScriptAccess" value="always" />
+                        <param name="quality" value="high" />
+                        <param name="scale" value="noscale" />
+                        <param NAME="FlashVars" value="text=">
+                        <param name="bgcolor" value="#E8E8E8">
+                        <embed src="clippy/clippy.swf"
+                               width="110"
+                               height="14"
+                               name="clippy"
+                               quality="high"
+                               allowScriptAccess="always"
+                               type="application/x-shockwave-flash"
+                               pluginspage="http://www.macromedia.com/go/getflashplayer"
+                               FlashVars="text="
+                               bgcolor="#E8E8E8"
+                            />
+                    </object>
+                    </span>
+        </div>
+    </div>
+    <input id="try-this" type="submit" name="subm" value="Try this!" class="btn btn-large btn-success" />
+    <input id="save-snippet" type="button" name="save-snippet" value="Save Snippet!" class="btn btn-primary" />
+</form>
+<div class="help">
+    debug:
+    &lt; foo()
+    krumo(foo());
+</div>
+<div class="help">
+    commands:
+    krumo::backtrace();
+    krumo::includes();
+    krumo::functions();
+    krumo::classes();
+    krumo::defines();
+</div>
+<div class="help">
+    misc:
+    press ctrl-enter to submit
+    put '#\n' on the first line to enforce
+    \n line breaks (\r\n etc work too)
+</div>
+</div>
 
-            $('#slideToggle').click(function() {
-              $('#expandable').slideToggle();
-              $('#expand-icon').toggleClass('icon-minus-sign');
-            });
+<script type="text/javascript">
 
-            $('#slideToggleSnippets').click(function() {
-                $('#expandable-snippets').slideToggle();
-                $('#expand-snippets-icon').toggleClass('icon-minus-sign');
-            });
+    $(document).ready(function() {
+        var localStorageKey = 'PhpSnippets';
 
-            $.urlParam = function(name){
-                var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
-                return results[1] || 0;
-            }
+        TFSN.LocalStorageHelper = new TFSN.LocalStorageHelper();
+        TFSN.LocalStorageHelper.initialize(localStorageKey);
 
+        $('#slideToggle').click(function() {
+            $('#expandable').slideToggle();
+            $('#expand-icon').toggleClass('icon-minus-sign');
+        });
 
-            var localStorageKey = 'PhpSnippets';
+        $('#slideToggleSnippets').click(function() {
+            $('#expandable-snippets').slideToggle();
+            $('#expand-snippets-icon').toggleClass('icon-minus-sign');
+        });
 
-            $('#save-snippet').click(function(){
-                var snippetCode = editor.getSession().getValue();
-                var snippetProject = $.urlParam('site');
-                var snippetLabel = prompt('Snippet Name:');
+        $('i.preview-snippet').click(function(){
+            $(this).next('pre').slideToggle();
+            $(this).toggleClass('icon-minus-sign');
+        });
+    });
 
-                var d = new Date();
-
-                var month = d.getMonth()+1;
-                var day = d.getDate();
-
-                var output = d.getFullYear() + '/' +
-                    ((''+month).length<2 ? '0' : '') + month + '/' +
-                    ((''+day).length<2 ? '0' : '') + day;
-
-                snippetLabel = (snippetLabel == '') ? output : snippetLabel;
-
-                var newSnippet = {
-                    'snippetCode' : snippetCode,
-                    'snippetProject' : snippetProject,
-                    'snippetLabel' : snippetLabel
-                };
-
-                var snippetsFromLocal = (getArrayOfStorage()) ? getArrayOfStorage() : [];
-
-                snippetsFromLocal.push(newSnippet);
-
-                localStorage.setItem(localStorageKey, JSON.stringify(snippetsFromLocal));
-
-                var snippets = JSON.parse(getLocalStorage());
-
-                for(var i = 0; i < localStorage.length; i++){
-                    $('#snippetsTemplate').tmpl(snippets[i]).appendTo('#expandable-snippets');
-                }
-
-
-            });
-
-            function getArrayOfStorage(){
-                return JSON.parse(getLocalStorage());
-            }
-
-            function getLocalStorage(){
-                return localStorage.getItem(localStorageKey);
-            }
-
-            function checkSnippet(ele) {
-
-                var snippets = getArrayOfStorage();
-
-                var elem = $(ele);
-
-                var thisProject = elem.attr('data-project');
-                var thisLabel = elem.attr('data-label');
-
-                for(var i = 0; i < snippets.length; i++){
-                    if(snippets[i].snippetProject == thisProject && snippets[i].snippetLabel == thisLabel){
-                        editor.getSession().setValue(snippets[i].snippetCode);
-                    }
-                }
-            }
-
-            var snippetsFromLocal = (getArrayOfStorage()) ? getArrayOfStorage() : [];
-            var snippets = JSON.parse(getLocalStorage());
-
-            for(var i = 0; i < localStorage.length; i++){
-                $('#snippetsTemplate').tmpl(snippets[i]).appendTo('#expandable-snippets');
-            }
-
-        </script>
-    </body>
+</script>
+</body>
 </html>

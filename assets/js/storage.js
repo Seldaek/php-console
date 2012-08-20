@@ -6,56 +6,92 @@
  * To change this template use File | Settings | File Templates.
  */
 
-var storage = {
-    storage: null,
-    dummy: "dummy_data",
-    local: "local",
-    session: "session",
-    isAvailable: true,
-    verify: function (){
-        this.setStorage();
-        try{
-            this.set(this.dummy,this.dummy)
+window.TFSN = {};
 
-            if (this.get(this.dummy) == this.dummy){
-                this.isAvailable = true;
-            }else{
-                this.isAvailable = false;
+TFSN.LocalStorageHelper = function() {};
+
+TFSN.LocalStorageHelper.prototype = {
+    initialize: function(localStorageKey){
+        this.localStorageKey = localStorageKey;
+        this.snippetsTemplate = '#snippetsTemplate';
+        this.eleToAttachTemplates = '#expandable-snippets';
+        this.arrayOfSnippets = [];
+
+        this.loadSaveSnippetsListeners();
+        this.checkForExistingSnippets();
+    },
+
+    getArrayOfStorage: function(){
+        return JSON.parse(this.getLocalStorage());
+    },
+
+    getLocalStorage: function(){
+        return (localStorage.getItem(this.localStorageKey)) ? localStorage.getItem(this.localStorageKey) : [];
+    },
+
+    checkSnippet: function(ele) {
+
+        this.arrayOfSnippets = this.getArrayOfStorage();
+
+        var elem = $(ele);
+
+        var thisProject = elem.attr('data-project');
+        var thisLabel = elem.attr('data-label');
+
+        for(var i = 0; i < this.arrayOfSnippets.length; i++){
+            if(this.arrayOfSnippets[i].snippetProject == thisProject && this.arrayOfSnippets[i].snippetLabel == thisLabel){
+                editor.getSession().setValue(this.arrayOfSnippets[i].snippetCode);
             }
         }
-        catch(e){
-            this.isAvailable = false;
+    },
+
+    loadSaveSnippetsListeners: function(){
+        $('#save-snippet').click(function(){
+            var snippetCode = editor.getSession().getValue();
+            var snippetProject = this.getUrlParam('site');
+            var snippetLabel = prompt('Snippet Name:');
+
+            snippetLabel = (snippetLabel == '') ? this.getTodaysDate() : snippetLabel;
+
+            var newSnippet = {
+                'snippetCode' : snippetCode,
+                'snippetProject' : snippetProject,
+                'snippetLabel' : snippetLabel
+            };
+
+            this.arrayOfSnippets = this.getArrayOfStorage();
+            this.arrayOfSnippets.push(newSnippet);
+
+            localStorage.setItem(this.localStorageKey, JSON.stringify(this.arrayOfSnippets));
+
+            this.checkForExistingSnippets();
+
+
+        });
+    },
+
+    getUrlParam: function(name){
+        var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        return results[1] || 0;
+    },
+
+    getTodaysDate : function(){
+        var d = new Date();
+
+        var month = d.getMonth()+1;
+        var day = d.getDate();
+
+        return output = d.getFullYear() + '/' +
+            ((''+month).length<2 ? '0' : '') + month + '/' +
+            ((''+day).length<2 ? '0' : '') + day;
+    },
+
+    checkForExistingSnippets : function(){
+        this.arrayOfSnippets = this.getArrayOfStorage();
+
+        for(var i = 0; i < localStorage.length; i++){
+            $(this.snippetsTemplate).tmpl(this.arrayOfSnippets[i]).appendTo(this.eleToAttachTemplates);
         }
-
-        return  this.isAvailable
-    },
-    set: function (key,value){
-        this.getStorage().setItem(key,value)
-    },
-    get: function (key){
-        this.getStorage().getItem(key)
-    },
-    update: function(key,value){
-        this.set(key,value)
-    },
-    remove: function(key){
-        this.getStorage().removeItem(key)
-    },
-    getStorage: function(type){
-        type = type || this.local
-
-        if (type == this.local){
-            this.setStorage(localStorage)
-        }else{
-            this.setStorage(sessionStorage)
-        }
-
-        return this.storage
-    },
-
-    setStorage: function(storage){
-        this.storage  = storage
-
-        return this
     }
-}
+
+};
