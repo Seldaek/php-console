@@ -1,5 +1,5 @@
-PHP Console
-===========
+PHP Console For Magento
+=======================
 
 A web console to try your PHP code into
 
@@ -16,6 +16,8 @@ Setup
 -----
 
 Clone the git repo or download it as a zip/tarball, drop it somewhere in your local web document root and access it with http://localhost/path/to/php-console
+
+This will automatically search for Magento sites in the current directory and include them for testing. Also added ability to save snippets using localStorage.
 
 Contributing
 ------------
