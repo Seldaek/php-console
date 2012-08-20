@@ -19,20 +19,22 @@ Clone the git repo or download it as a zip/tarball, drop it somewhere in your lo
 
 This will automatically search for Magento sites in the current directory and include them for testing. Also added ability to save snippets using localStorage.
 
-Contributing
-------------
-
-Code contributions or ideas are obviously much welcome. Send pull requests or issues on github.
-
 Author
 ------
+
+Thomas Slade - <dumplin593858783@gmail.com><br />
+
+Forked From:
 
 Jordi Boggiano - <j.boggiano@seld.be><br />
 <http://seld.be/> - <http://twitter.com/seldaek>
 
 Changelog
 ---------
-
+- 1.2.3
+  - Added ability to save console snippets using localStorage.
+- 1.2.2
+  - Added ability to include Mage files from multiple sites in same directory level.
 - 1.2.1
   - Performance fixes for ACE editor integration
   - JS is no longer a requirement
