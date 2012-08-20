@@ -21,19 +21,22 @@ $projects = new Projects();
 
 
 $content = $title = $errors = '';
-$content .= '<h3 id="slideToggle"><i id="expand-icon" class="icon-plus-sign"></i>Other Projects: </h3><div id="expandable" style="display: none">' . $projects->renderProjects() . '</div>';
+$content .= '<h3 id="slideToggle"><i id="expand-icon" class="icon-plus-sign"></i>Projects: </h3><div id="expandable" style="display: none">' . $projects->renderProjects() . '</div>';
 
 $siteDirectory = '';
 if(array_key_exists('a', $params) && $params['a'] == 'debug' && array_key_exists('site', $params)){
     $site = $params['site'];
     $siteDirectory = $projects->getDirectoryFromSiteName($site);
 
-    require_once $siteDirectory . 'app/Mage.php';
-    Varien_Profiler::enable();
-    Mage::setIsDeveloperMode(true);
-    umask(0);
-    Mage::app();
-    $title = (array_key_exists('site', $params) ? $params['site'] . ' (<a target="_blank" href="' . Mage::app()->getStore()->getBaseUrl() . '">' . Mage::app()->getStore()->getBaseUrl() . '</a>)': '');
+    $mageFile = $siteDirectory . 'app/Mage.php';
+    if(file_exists($mageFile)){
+        require_once $mageFile;
+        Varien_Profiler::enable();
+        Mage::setIsDeveloperMode(true);
+        umask(0);
+        Mage::app();
+        $title = (array_key_exists('site', $params) ? $params['site'] . ' (<a target="_blank" href="' . Mage::app()->getStore()->getBaseUrl() . '">' . Mage::app()->getStore()->getBaseUrl() . '</a>)': '');
+    }
 
 
 }
@@ -109,6 +112,7 @@ if (isset($_POST['code'])) {
         <link rel="stylesheet" type="text/css" href="./assets/styles/bootstrap-responsive.css" />
         <link rel="stylesheet" type="text/css" href="./assets/styles/docs.css" />
         <script src="./assets/js/jquery-1.7.1.min.js"></script>
+        <script src="./assets/js/jquery-tmpl-min.js"></script>
         <script src="./assets/js/ace/ace.js"></script>
         <script src="./assets/js/ace/mode-php.js"></script>
         <script src="./assets/js/php-console.js"></script>
@@ -122,7 +126,7 @@ if (isset($_POST['code'])) {
         </script>
     </head>
     <body>
-
+    <div class="container">
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
@@ -130,10 +134,24 @@ if (isset($_POST['code'])) {
                 </div>
             </div>
         </div>
-        <div>
-            <h1><?php echo ($title != '') ? $title . '<a class="" href="./index.php"><i class="icon icon-remove-sign"></i></a>' : ''; ?></h1>
-            <?php echo $content; ?>
+        <h1><?php echo ($title != '') ? $title . '<a class="" href="./index.php"><i class="icon icon-remove-sign"></i></a>' : ''; ?></h1>
+        <div class="row">
+            <div class="span6">
+                <?php echo $content; ?>
+            </div>
+            <div class="span6">
+                <h3 id="slideToggleSnippets">
+                    <i id="expand-snippets-icon" class="icon-plus-sign"></i>Snippets: </h3>
+                        <div id="expandable-snippets" style="display: none">
+                            <script id="snippetsTemplate" type="text/x-jQuery-tmpl">
+                                <div>
+                                    <a class="load-snippet" data-project="${snippetProject}" data-label="${snippetLabel}" onClick="checkSnippet(this)">${snippetProject}: ${snippetLabel}</a>
+                                </div>
+                            </script>
+                        </div>
+            </div>
         </div>
+
         <div class="output"><pre><?php echo $debugOutput ?></pre></div>
         <form id="code-form" method="POST" action="">
             <div class="input">
@@ -164,8 +182,8 @@ if (isset($_POST['code'])) {
                     </span>
                 </div>
             </div>
-            <input id="try-this" type="submit" name="subm" value="Try this!" />
-            <input id="save-snippet" type="button" name="save-snippet" value="Save Snippet!" />
+            <input id="try-this" type="submit" name="subm" value="Try this!" class="btn btn-large btn-success" />
+            <input id="save-snippet" type="button" name="save-snippet" value="Save Snippet!" class="btn btn-primary" />
         </form>
         <div class="help">
         debug:
@@ -186,6 +204,7 @@ if (isset($_POST['code'])) {
             put '#\n' on the first line to enforce
                 \n line breaks (\r\n etc work too)
         </div>
+    </div>
 
         <script type="text/javascript">
 
@@ -194,7 +213,87 @@ if (isset($_POST['code'])) {
               $('#expand-icon').toggleClass('icon-minus-sign');
             });
 
-            $('#code-form').sisyphus();
+            $('#slideToggleSnippets').click(function() {
+                $('#expandable-snippets').slideToggle();
+                $('#expand-snippets-icon').toggleClass('icon-minus-sign');
+            });
+
+            $.urlParam = function(name){
+                var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
+                return results[1] || 0;
+            }
+
+
+            var localStorageKey = 'PhpSnippets';
+
+            $('#save-snippet').click(function(){
+                var snippetCode = editor.getSession().getValue();
+                var snippetProject = $.urlParam('site');
+                var snippetLabel = prompt('Snippet Name:');
+
+                var d = new Date();
+
+                var month = d.getMonth()+1;
+                var day = d.getDate();
+
+                var output = d.getFullYear() + '/' +
+                    ((''+month).length<2 ? '0' : '') + month + '/' +
+                    ((''+day).length<2 ? '0' : '') + day;
+
+                snippetLabel = (snippetLabel == '') ? output : snippetLabel;
+
+                var newSnippet = {
+                    'snippetCode' : snippetCode,
+                    'snippetProject' : snippetProject,
+                    'snippetLabel' : snippetLabel
+                };
+
+                var snippetsFromLocal = (getArrayOfStorage()) ? getArrayOfStorage() : [];
+
+                snippetsFromLocal.push(newSnippet);
+
+                localStorage.setItem(localStorageKey, JSON.stringify(snippetsFromLocal));
+
+                var snippets = JSON.parse(getLocalStorage());
+
+                for(var i = 0; i < localStorage.length; i++){
+                    $('#snippetsTemplate').tmpl(snippets[i]).appendTo('#expandable-snippets');
+                }
+
+
+            });
+
+            function getArrayOfStorage(){
+                return JSON.parse(getLocalStorage());
+            }
+
+            function getLocalStorage(){
+                return localStorage.getItem(localStorageKey);
+            }
+
+            function checkSnippet(ele) {
+
+                var snippets = getArrayOfStorage();
+
+                var elem = $(ele);
+
+                var thisProject = elem.attr('data-project');
+                var thisLabel = elem.attr('data-label');
+
+                for(var i = 0; i < snippets.length; i++){
+                    if(snippets[i].snippetProject == thisProject && snippets[i].snippetLabel == thisLabel){
+                        editor.getSession().setValue(snippets[i].snippetCode);
+                    }
+                }
+            }
+
+            var snippetsFromLocal = (getArrayOfStorage()) ? getArrayOfStorage() : [];
+            var snippets = JSON.parse(getLocalStorage());
+
+            for(var i = 0; i < localStorage.length; i++){
+                $('#snippetsTemplate').tmpl(snippets[i]).appendTo('#expandable-snippets');
+            }
+
         </script>
     </body>
 </html>

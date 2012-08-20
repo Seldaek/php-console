@@ -11,11 +11,13 @@
  *
  * Source on Github http://github.com/Seldaek/php-console
  */
+
+var editor;
 (function(require, $, ace) {
     "use strict";
 
     var updateStatusBar, prepareClippyButton, refreshKrumoState, handleSubmit, initializeAce,
-        options, editor;
+        options;
     options = {
         tabsize: 4,
         editor: 'editor'

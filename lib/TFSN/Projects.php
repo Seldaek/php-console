@@ -57,8 +57,8 @@ class Projects {
             if(strripos($dirName, '/')){
                 $siteName = substr($dirName, strripos($dirName, '/') + 1);
                 $html .= "
-                        <div class='span4'>
-                                <p><a class='btn' href='./index.php?a=debug&site=$siteName'>$siteName</a></p>
+                        <div class='span2'>
+                                <p><a class='btn btn-info' href='./index.php?a=debug&site=$siteName'>$siteName</a></p>
 
                         </div>";
 

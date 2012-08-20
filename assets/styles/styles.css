@@ -6,8 +6,7 @@ body {
     background: #eee;
 }
 
-input,
-input#try-this {
+input {
     width: 99%;
     margin: auto;
     display: block;
@@ -19,8 +18,7 @@ a {
     color: #88f;
 }
 
-.output, .input,
-input#try-this {
+.output, .input{
     border: 1px solid #aaa;
     background: #fff;
     -moz-border-radius: 5px;
@@ -33,8 +31,7 @@ input#try-this {
     margin: 10px;
 }
 
-.input,
-input#try-this {
+.input{
     margin: .5% 10px;
 }
 
@@ -82,4 +79,11 @@ input#try-this {
     width: 33%;
     float: left;
     white-space: pre;
+}
+
+#save-snippet,
+#try-this{
+    width: 99%;
+    display: block;
+    margin: 4px 10px;
 }
