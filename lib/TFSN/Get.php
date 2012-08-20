@@ -199,7 +199,7 @@ class Get{
     {
         if ((null === $value) && !is_array($spec)) {
             #require_once 'Zend/Controller/Exception.php';
-            throw new Zend_Controller_Exception('Invalid value passed to setQuery(); must be either array of values or key/value pair');
+            throw new Exception('Invalid value passed to setQuery(); must be either array of values or key/value pair');
         }
         if ((null === $value) && is_array($spec)) {
             foreach ($spec as $key => $value) {

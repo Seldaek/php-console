@@ -25,7 +25,7 @@ class Projects {
         $files = glob($dir . "*");
         foreach($files as $file)
         {
-            if(is_dir($file) && strrpos($file, '.dev') !== false){$dirArray[] = $file;}
+            if(is_dir($file)){$dirArray[] = $file;}
         }
         
         return $dirArray;   

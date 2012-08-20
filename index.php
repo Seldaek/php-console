@@ -33,7 +33,7 @@ if(array_key_exists('a', $params) && $params['a'] == 'debug' && array_key_exists
     Mage::setIsDeveloperMode(true);
     umask(0);
     Mage::app();
-    $title = (array_key_exists('site', $params) ? $params['site'] . '(' . Mage::app()->getStore()->getName() . ')': '');
+    $title = (array_key_exists('site', $params) ? $params['site'] . ' (<a target="_blank" href="' . Mage::app()->getStore()->getBaseUrl() . '">' . Mage::app()->getStore()->getBaseUrl() . '</a>)': '');
 
 
 }
@@ -113,7 +113,7 @@ if (isset($_POST['code'])) {
         <script src="./assets/js/ace/mode-php.js"></script>
         <script src="./assets/js/php-console.js"></script>
         <script src="./assets/js/google-code-prettify/prettify.js"></script>
-        <script src="./assets/js/sisyphus.js"></script>
+        <script src="./assets/js/storage.js"></script>
         <link rel="stylesheet" type="text/css" href="./assets/js/google-code-prettify/prettify.css" />
         <script>
             $.console({
@@ -165,6 +165,7 @@ if (isset($_POST['code'])) {
                 </div>
             </div>
             <input id="try-this" type="submit" name="subm" value="Try this!" />
+            <input id="save-snippet" type="button" name="save-snippet" value="Save Snippet!" />
         </form>
         <div class="help">
         debug:
