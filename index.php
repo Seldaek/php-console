@@ -1,25 +1,42 @@
 <?php
 
+ini_set('display_errors', 1);
+
 $options = array(
     // which string should represent a tab for indentation
     'tabsize' => 4,
 );
 
-$includePath = array();
-$includePath[] = '.';
-$includePath[] = 'lib/Zend';
-$includePath[] = get_include_path();
-$includePath = implode(PATH_SEPARATOR,$includePath);
-set_include_path($includePath);
-
-//var_dump(get_include_path());die;
-
-require_once 'Zend/Loader.php';
-
-Zend_Loader::registerAutoLoad('Zend_Loader',true);
 
 
+require_once 'lib/TFSN/Projects.php';
+require_once 'lib/TFSN/Get.php';
+require_once 'lib/TFSN/CommandLine.php';
 
+$get = new Get();
+$params = $get->getParams();
+
+$commandLine = new CommandLine();
+$projects = new Projects();
+
+
+$content = $title = $errors = '';
+$content .= '<h3 id="slideToggle"><i id="expand-icon" class="icon-plus-sign"></i>Other Projects: </h3><div id="expandable" style="display: none">' . $projects->renderProjects() . '</div>';
+
+$siteDirectory = '';
+if(array_key_exists('a', $params) && $params['a'] == 'debug' && array_key_exists('site', $params)){
+    $site = $params['site'];
+    $siteDirectory = $projects->getDirectoryFromSiteName($site);
+
+    require_once $siteDirectory . 'app/Mage.php';
+    Varien_Profiler::enable();
+    Mage::setIsDeveloperMode(true);
+    umask(0);
+    Mage::app();
+    $title = (array_key_exists('site', $params) ? $params['site'] . '(' . Mage::app()->getStore()->getName() . ')': '');
+
+
+}
 /**
  * PHP Console
  *
@@ -41,7 +58,6 @@ if (!in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'), true)) {
 define('PHP_CONSOLE_VERSION', '1.3.0-dev');
 require 'krumo/class.krumo.php';
 
-ini_set('log_errors', 0);
 ini_set('display_errors', 1);
 error_reporting(E_ALL | E_STRICT);
 
@@ -87,12 +103,18 @@ if (isset($_POST['code'])) {
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>Debug Console</title>
-        <link rel="stylesheet" type="text/css" href="styles.css" />
-        <script src="jquery-1.7.1.min.js"></script>
-        <script src="ace/ace.js"></script>
-        <script src="ace/mode-php.js"></script>
-        <script src="php-console.js"></script>
+        <title>Magento/Zend/PHP Debug Console</title>
+        <link rel="stylesheet" type="text/css" href="./assets/styles/styles.css" />
+        <link rel="stylesheet" type="text/css" href="./assets/styles/bootstrap.css" />
+        <link rel="stylesheet" type="text/css" href="./assets/styles/bootstrap-responsive.css" />
+        <link rel="stylesheet" type="text/css" href="./assets/styles/docs.css" />
+        <script src="./assets/js/jquery-1.7.1.min.js"></script>
+        <script src="./assets/js/ace/ace.js"></script>
+        <script src="./assets/js/ace/mode-php.js"></script>
+        <script src="./assets/js/php-console.js"></script>
+        <script src="./assets/js/google-code-prettify/prettify.js"></script>
+        <script src="./assets/js/sisyphus.js"></script>
+        <link rel="stylesheet" type="text/css" href="./assets/js/google-code-prettify/prettify.css" />
         <script>
             $.console({
                 tabsize: <?php echo json_encode($options['tabsize']) ?>
@@ -100,10 +122,23 @@ if (isset($_POST['code'])) {
         </script>
     </head>
     <body>
-        <div class="output"><?php echo $debugOutput ?></div>
-        <form method="POST" action="">
+
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="brand" href="./index.php">TFSN</a>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h1><?php echo ($title != '') ? $title . '<a class="" href="./index.php"><i class="icon icon-remove-sign"></i></a>' : ''; ?></h1>
+            <?php echo $content; ?>
+        </div>
+        <div class="output"><pre><?php echo $debugOutput ?></pre></div>
+        <form id="code-form" method="POST" action="">
             <div class="input">
-                <textarea class="editor" id="editor" name="code"><?php echo (isset($_POST['code']) ? htmlentities($_POST['code'], ENT_QUOTES, 'UTF-8') : null) ?></textarea>
+                <label for="editor"></label>
+                <textarea class="editor" id="editor" name="code"></textarea>
                 <div class="statusbar">
                     <span class="position">Line: 1, Column: 1</span>
                     <span class="copy">
@@ -129,7 +164,7 @@ if (isset($_POST['code'])) {
                     </span>
                 </div>
             </div>
-            <input type="submit" name="subm" value="Try this!" />
+            <input id="try-this" type="submit" name="subm" value="Try this!" />
         </form>
         <div class="help">
         debug:
@@ -150,8 +185,15 @@ if (isset($_POST['code'])) {
             put '#\n' on the first line to enforce
                 \n line breaks (\r\n etc work too)
         </div>
-        <div class="footer">
-            php-console v<?php echo PHP_CONSOLE_VERSION ?> - by <a href="http://seld.be/">Jordi Boggiano</a> - <a href="http://github.com/Seldaek/php-console">sources on github</a>
-        </div>
+
+        <script type="text/javascript">
+
+            $('#slideToggle').click(function() {
+              $('#expandable').slideToggle();
+              $('#expand-icon').toggleClass('icon-minus-sign');
+            });
+
+            $('#code-form').sisyphus();
+        </script>
     </body>
 </html>
