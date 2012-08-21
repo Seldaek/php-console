@@ -15,6 +15,7 @@ TFSN.LocalStorageHelper.prototype = {
         this.localStorageKey = localStorageKey;
         this.snippetsTemplate = '#snippetsTemplate';
         this.eleToAttachTemplates = '#expandable-snippets';
+        this.snippetsWrapper = '#snippets-wrapper';
         this.arrayOfSnippets = [];
 
         this.loadSaveSnippetsListeners();
@@ -22,11 +23,11 @@ TFSN.LocalStorageHelper.prototype = {
     },
 
     getArrayOfStorage: function(){
-        return JSON.parse(this.getLocalStorage());
+        return (this.getLocalStorage()) ? JSON.parse(this.getLocalStorage()) : [];
     },
 
     getLocalStorage: function(){
-        return (localStorage.getItem(this.localStorageKey)) ? localStorage.getItem(this.localStorageKey) : '{}';
+        return (localStorage.getItem(this.localStorageKey)) ? localStorage.getItem(this.localStorageKey) : false;
     },
 
     checkSnippet: function(ele) {
@@ -61,6 +62,7 @@ TFSN.LocalStorageHelper.prototype = {
             };
 
             parent.arrayOfSnippets = parent.getArrayOfStorage();
+            console.log(parent.arrayOfSnippets);
             parent.arrayOfSnippets.push(newSnippet);
 
             localStorage.setItem(parent.localStorageKey, JSON.stringify(parent.arrayOfSnippets));
@@ -93,6 +95,20 @@ TFSN.LocalStorageHelper.prototype = {
         for(var i = 0; i < localStorage.length; i++){
             $(this.snippetsTemplate).tmpl(this.arrayOfSnippets[i]).appendTo(this.eleToAttachTemplates);
         }
+
+        if(localStorage.length <= 0){
+            $(this.snippetsWrapper).hide();
+        } else {
+            $(this.snippetsWrapper).show();
+            this.loadSnippetsSliders();
+        }
+    },
+
+    loadSnippetsSliders : function(){
+        $('i.preview-snippet').click(function(){
+            $(this).next('pre').slideToggle();
+            $(this).toggleClass('icon-minus-sign');
+        });
     }
 
 };

@@ -140,7 +140,7 @@ if (isset($_POST['code'])) {
         <div class="span6">
             <?php echo $content; ?>
         </div>
-        <div class="span6">
+        <div id="snippets-wrapper" class="span6">
             <h3 id="slideToggleSnippets">
                 <i id="expand-snippets-icon" class="icon-plus-sign"></i>Snippets: </h3>
             <div id="expandable-snippets" style="display: none">
@@ -234,11 +234,6 @@ if (isset($_POST['code'])) {
         $('#slideToggleSnippets').click(function() {
             $('#expandable-snippets').slideToggle();
             $('#expand-snippets-icon').toggleClass('icon-minus-sign');
-        });
-
-        $('i.preview-snippet').click(function(){
-            $(this).next('pre').slideToggle();
-            $(this).toggleClass('icon-minus-sign');
         });
     });
 
