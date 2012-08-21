@@ -127,15 +127,19 @@ if (isset($_POST['code'])) {
     </script>
 </head>
 <body>
-<div class="container">
-    <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container">
-                <a class="brand" href="./index.php">TFSN</a>
-            </div>
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="brand" href="./index.php">TFSN</a>
         </div>
     </div>
-    <h1><?php echo ($title != '') ? $title . '<a class="" href="./index.php"><i class="icon icon-remove-sign"></i></a>' : ''; ?></h1>
+</div>
+<div class="container">
+    <div class="row">
+        <span class="span12">
+            <h1><?php echo ($title != '') ? $title . '<a class="" href="./index.php"><i class="icon icon-remove-sign"></i></a>' : ''; ?></h1>
+        </span>
+    </div>
     <div class="row">
         <div class="span6">
             <?php echo $content; ?>
@@ -158,19 +162,26 @@ if (isset($_POST['code'])) {
                             <i class="preview-snippet icon-plus-sign"></i>
                             <pre class="prettyprint linenums span6" style="display: none;">${snippetCode}</pre>
                         </li>
+                    </ul>
+                </script>
+                <span class="row">
+                    <button id="clearSnippets" class="btn btn-danger">Remove All Snippets</button>
+                </span>
             </div>
-            </script>
         </div>
     </div>
-</div>
+    <div class="row">
+        <div class="span12" id="messages">
+        </div>
+    </div>
 
-<div class="output"><pre><?php echo $debugOutput ?></pre></div>
-<form id="code-form" method="POST" action="">
-    <div class="input">
-        <label for="editor"></label>
-        <textarea class="editor" id="editor" name="code"></textarea>
-        <div class="statusbar">
-            <span class="position">Line: 1, Column: 1</span>
+    <div class="output"><pre><?php echo $debugOutput ?></pre></div>
+    <form id="code-form" method="POST" action="">
+        <div class="input">
+            <label for="editor"></label>
+            <textarea class="editor" id="editor" name="code"></textarea>
+            <div class="statusbar">
+                <span class="position">Line: 1, Column: 1</span>
                     <span class="copy">
                         Copy selection: <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="110" height="14" id="clippy">
                         <param name="movie" value="clippy/clippy.swf"/>
@@ -192,30 +203,30 @@ if (isset($_POST['code'])) {
                             />
                     </object>
                     </span>
+            </div>
         </div>
+        <input id="try-this" type="submit" name="subm" value="Try this!" class="btn btn-large btn-success" />
+        <input id="save-snippet" type="button" name="save-snippet" value="Save Snippet!" class="btn btn-primary" />
+    </form>
+    <div class="help">
+        debug:
+        &lt; foo()
+        krumo(foo());
     </div>
-    <input id="try-this" type="submit" name="subm" value="Try this!" class="btn btn-large btn-success" />
-    <input id="save-snippet" type="button" name="save-snippet" value="Save Snippet!" class="btn btn-primary" />
-</form>
-<div class="help">
-    debug:
-    &lt; foo()
-    krumo(foo());
-</div>
-<div class="help">
-    commands:
-    krumo::backtrace();
-    krumo::includes();
-    krumo::functions();
-    krumo::classes();
-    krumo::defines();
-</div>
-<div class="help">
-    misc:
-    press ctrl-enter to submit
-    put '#\n' on the first line to enforce
-    \n line breaks (\r\n etc work too)
-</div>
+    <div class="help">
+        commands:
+        krumo::backtrace();
+        krumo::includes();
+        krumo::functions();
+        krumo::classes();
+        krumo::defines();
+    </div>
+    <div class="help">
+        misc:
+        press ctrl-enter to submit
+        put '#\n' on the first line to enforce
+        \n line breaks (\r\n etc work too)
+    </div>
 </div>
 
 <script type="text/javascript">

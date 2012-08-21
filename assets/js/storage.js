@@ -16,6 +16,7 @@ TFSN.LocalStorageHelper.prototype = {
         this.snippetsTemplate = '#snippetsTemplate';
         this.eleToAttachTemplates = '#expandable-snippets';
         this.snippetsWrapper = '#snippets-wrapper';
+        this.clearSnippetsBtn = '#clearSnippets';
         this.arrayOfSnippets = [];
 
         this.loadSaveSnippetsListeners();
@@ -53,8 +54,6 @@ TFSN.LocalStorageHelper.prototype = {
             var snippetProject = parent.getUrlParam('site');
             var snippetLabel = prompt('Snippet Name:');
 
-            snippetLabel = (snippetLabel == '') ? parent.getTodaysDate() : snippetLabel;
-
             var newSnippet = {
                 'snippetCode' : snippetCode,
                 'snippetProject' : snippetProject,
@@ -62,15 +61,25 @@ TFSN.LocalStorageHelper.prototype = {
             };
 
             parent.arrayOfSnippets = parent.getArrayOfStorage();
-            console.log(parent.arrayOfSnippets);
             parent.arrayOfSnippets.push(newSnippet);
 
             localStorage.setItem(parent.localStorageKey, JSON.stringify(parent.arrayOfSnippets));
 
+            parent.successSnippetSaved();
+            parent.checkForExistingSnippets();
+        });
+        $(this.clearSnippetsBtn).click(function(){
+            localStorage.clear();
             parent.checkForExistingSnippets();
 
-
         });
+    },
+
+    successSnippetSaved : function(){
+      $('#messages').html('<div id="current-message" class="alert alert-success">Snippet has been saved...</div>');
+      $('#current-message').fadeOut(2000, function(){
+              $(this).remove().delay(1000);
+      });
     },
 
     getUrlParam: function(name){
@@ -78,21 +87,10 @@ TFSN.LocalStorageHelper.prototype = {
         return results[1] || 0;
     },
 
-    getTodaysDate : function(){
-        var d = new Date();
-
-        var month = d.getMonth()+1;
-        var day = d.getDate();
-
-        return output = d.getFullYear() + '/' +
-            ((''+month).length<2 ? '0' : '') + month + '/' +
-            ((''+day).length<2 ? '0' : '') + day;
-    },
-
     checkForExistingSnippets : function(){
         this.arrayOfSnippets = this.getArrayOfStorage();
 
-        for(var i = 0; i < localStorage.length; i++){
+        for(var i = 0; i < this.arrayOfSnippets.length; i++){
             $(this.snippetsTemplate).tmpl(this.arrayOfSnippets[i]).appendTo(this.eleToAttachTemplates);
         }
 
