@@ -17,7 +17,7 @@ Setup
 
 Clone the git repo or download it as a zip/tarball, drop it somewhere in your local web document root and access it with http://localhost/path/to/php-console
 
-This will automatically search for Magento sites in the current directory and include them for testing. Also added ability to save snippets using localStorage.
+This will automatically search for Magento sites in the parent directory and include them for testing. Also added ability to save snippets using localStorage.
 
 Author
 ------
@@ -31,6 +31,8 @@ Jordi Boggiano - <j.boggiano@seld.be><br />
 
 Changelog
 ---------
+- 1.2.4
+  - Added ability to remove and clear all snippets.
 - 1.2.3
   - Added ability to save console snippets using localStorage.
 - 1.2.2
