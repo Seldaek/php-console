@@ -10,7 +10,7 @@ It is secure since accessible only from the local host, and very easy to setup a
 Screenshot
 ----------
 
-<img src="http://seld.be/_misc/php-console.png" alt="PHP Console screenshot" border="0" />
+<img src="https://www.dropbox.com/sh/21m2b1dxa6td2xk/VvVYHmmF_w/Selection_014.png" alt="Magento PHP Console screenshot" border="0" />
 
 Setup
 -----

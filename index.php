@@ -176,7 +176,7 @@ if (isset($_POST['code'])) {
                     </li>
                 </script>
 
-                <div class="row">
+                <div>
                     <button id="clearSnippets" class="btn btn-danger">Remove All Snippets <i class="icon-white icon-minus-sign"></i></button>
                 </div>
             </div>
