@@ -160,12 +160,13 @@ if (isset($_POST['code'])) {
                                 ${snippetProject}: ${snippetLabel}
                             </a>
                             <i class="preview-snippet icon-plus-sign"></i>
+                            <i class="remove-snippet icon icon-remove-sign"></i>
                             <pre class="prettyprint linenums span6" style="display: none;">${snippetCode}</pre>
                         </li>
                     </ul>
                 </script>
                 <span class="row">
-                    <button id="clearSnippets" class="btn btn-danger">Remove All Snippets</button>
+                    <button id="clearSnippets" class="btn btn-danger">Remove All Snippets <i class="icon-white icon-minus-sign"></i></button>
                 </span>
             </div>
         </div>

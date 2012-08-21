@@ -24,11 +24,16 @@ TFSN.LocalStorageHelper.prototype = {
     },
 
     getArrayOfStorage: function(){
+        console.log(this.getLocalStorage());
         return (this.getLocalStorage()) ? JSON.parse(this.getLocalStorage()) : [];
     },
 
     getLocalStorage: function(){
         return (localStorage.getItem(this.localStorageKey)) ? localStorage.getItem(this.localStorageKey) : false;
+    },
+
+    setLocalStorage: function(){
+        localStorage.setItem(this.localStorageKey, JSON.stringify(this.arrayOfSnippets));
     },
 
     checkSnippet: function(ele) {
@@ -94,7 +99,7 @@ TFSN.LocalStorageHelper.prototype = {
             $(this.snippetsTemplate).tmpl(this.arrayOfSnippets[i]).appendTo(this.eleToAttachTemplates);
         }
 
-        if(localStorage.length <= 0){
+        if(this.arrayOfSnippets.length <= 0){
             $(this.snippetsWrapper).hide();
         } else {
             $(this.snippetsWrapper).show();
@@ -106,6 +111,22 @@ TFSN.LocalStorageHelper.prototype = {
         $('i.preview-snippet').click(function(){
             $(this).next('pre').slideToggle();
             $(this).toggleClass('icon-minus-sign');
+        });
+
+        this.arrayOfSnippets = this.getArrayOfStorage();
+        var parent = this;
+        $('.remove-snippet').click(function(){
+            var elem = $(this).prev().prev('a');
+            var thisProject = elem.attr('data-project');
+            var thisLabel = elem.attr('data-label');
+            for(var i = 0; i < parent.arrayOfSnippets.length; i++){
+                if(parent.arrayOfSnippets[i].snippetProject == thisProject && parent.arrayOfSnippets[i].snippetLabel == thisLabel){
+                    parent.arrayOfSnippets.splice(i, 1);
+                    localStorage.setItem(parent.localStorageKey, JSON.stringify(parent.arrayOfSnippets));
+                    parent.checkForExistingSnippets();
+                    break;
+                }
+            }
         });
     }
 
