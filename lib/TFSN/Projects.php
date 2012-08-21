@@ -39,13 +39,7 @@ class Projects {
         $i = 0;
         $mod = 0;
         foreach($projectsDirectoryArray as $project){
-            if($i++%$this->_colCount == 0){
-                $content .= "<div class='row-fluid'>";
-            }
             $content .= $this->beautifyProject($project);
-            if($i%$this->_colCount == 0 || $i == sizeof($projectsDirectoryArray)){
-                $content .= '</div>';
-            }
         }
 
         return $content;
@@ -56,11 +50,7 @@ class Projects {
         if($dirName){
             if(strripos($dirName, '/')){
                 $siteName = substr($dirName, strripos($dirName, '/') + 1);
-                $html .= "
-                        <div class='span2'>
-                                <p><a class='btn btn-info' href='./index.php?a=debug&site=$siteName'>$siteName</a></p>
-
-                        </div>";
+                $html .= "<li><a href='./index.php?a=debug&site=$siteName'>$siteName</a></li>";
 
             }
         }

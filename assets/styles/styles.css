@@ -28,12 +28,8 @@ a {
 
 .output {
     padding: 5px 10px;
-    margin: 10px;
 }
 
-.input{
-    margin: .5% 10px;
-}
 
 .statusbar {
     padding: 3px 5px;
@@ -83,7 +79,9 @@ a {
 
 #save-snippet,
 #try-this{
-    width: 99%;
+    width: 100%;
     display: block;
-    margin: 4px 10px;
+    margin: 4px 0;
 }
+
+pre.span6.prettyprint{margin-top: 10px;}

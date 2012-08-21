@@ -24,7 +24,6 @@ TFSN.LocalStorageHelper.prototype = {
     },
 
     getArrayOfStorage: function(){
-        console.log(this.getLocalStorage());
         return (this.getLocalStorage()) ? JSON.parse(this.getLocalStorage()) : [];
     },
 
@@ -96,7 +95,6 @@ TFSN.LocalStorageHelper.prototype = {
         this.arrayOfSnippets = this.getArrayOfStorage();
         $(this.eleToAttachTemplates).empty();
         for(var i = 0; i < this.arrayOfSnippets.length; i++){
-            console.log($(this.eleToAttachTemplates));
             $(this.snippetsTemplate).tmpl(this.arrayOfSnippets[i]).appendTo(this.eleToAttachTemplates);
         }
 

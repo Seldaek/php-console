@@ -20,8 +20,8 @@ $commandLine = new CommandLine();
 $projects = new Projects();
 
 
-$content = $title = $errors = '';
-$content .= '<h3 id="slideToggle"><i id="expand-icon" class="icon-plus-sign"></i>Projects: </h3><div id="expandable" style="display: none">' . $projects->renderProjects() . '</div>';
+$projectsList = $title = $errors = '';
+$projectsList .= $projects->renderProjects();
 
 $siteDirectory = '';
 if(array_key_exists('a', $params) && $params['a'] == 'debug' && array_key_exists('site', $params)){
@@ -119,6 +119,7 @@ if (isset($_POST['code'])) {
     <script src="./assets/js/php-console.js"></script>
     <script src="./assets/js/google-code-prettify/prettify.js"></script>
     <script src="./assets/js/storage.js"></script>
+    <script src="./assets/js/bootstrap-dropdown.js"></script>
     <link rel="stylesheet" type="text/css" href="./assets/js/google-code-prettify/prettify.css" />
     <script>
         $.console({
@@ -126,7 +127,7 @@ if (isset($_POST['code'])) {
         });
     </script>
 </head>
-<body>
+<body onload="prettyPrint()">
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">
@@ -141,10 +142,18 @@ if (isset($_POST['code'])) {
         </span>
     </div>
     <div class="row">
-        <div class="span6">
-            <?php echo $content; ?>
+        <div class="span4">
+            <div class="btn-group">
+                <a class="btn dropdown-toggle btn-large btn-info" data-toggle="dropdown" href="#">
+                    Projects
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <?php echo $projectsList ?>
+                </ul>
+            </div>
         </div>
-        <div id="snippets-wrapper" class="span6">
+        <div id="snippets-wrapper" class="span8">
             <h3 id="slideToggleSnippets">
                 <i id="expand-snippets-icon" class="icon-plus-sign"></i>Snippets: </h3>
             <div id="expandable-snippets" style="display: none">
@@ -154,7 +163,7 @@ if (isset($_POST['code'])) {
                 <script id="snippetsTemplate" type="text/x-jQuery-tmpl">
                     <li class="active row">
                         <a
-                            class="load-snippet span2"
+                            class="load-snippet span4"
                             data-project="${snippetProject}"
                             data-label="${snippetLabel}"
                             onClick="TFSN.LocalStorageHelper.checkSnippet(this)"
@@ -163,13 +172,13 @@ if (isset($_POST['code'])) {
                         </a>
                         <i class="preview-snippet icon-plus-sign"></i>
                         <i class="remove-snippet icon icon-remove-sign"></i>
-                        <pre class="prettyprint linenums span6" style="display: none;">${snippetCode}</pre>
+                        <pre class="prettyprint linenums span6 lang-php" style="display: none;">${snippetCode}</pre>
                     </li>
                 </script>
 
-                <span class="row">
+                <div class="row">
                     <button id="clearSnippets" class="btn btn-danger">Remove All Snippets <i class="icon-white icon-minus-sign"></i></button>
-                </span>
+                </div>
             </div>
         </div>
     </div>
@@ -177,14 +186,19 @@ if (isset($_POST['code'])) {
         <div class="span12" id="messages">
         </div>
     </div>
-
-    <div class="output"><pre><?php echo $debugOutput ?></pre></div>
-    <form id="code-form" method="POST" action="">
-        <div class="input">
-            <label for="editor"></label>
-            <textarea class="editor" id="editor" name="code"></textarea>
-            <div class="statusbar">
-                <span class="position">Line: 1, Column: 1</span>
+    <div class="row">
+        <div class="span12">
+            <div class="output"><pre><?php echo $debugOutput ?></pre></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <form id="code-form" method="POST" action="">
+                <div class="input">
+                    <label for="editor"></label>
+                    <textarea class="editor" id="editor" name="code"></textarea>
+                    <div class="statusbar">
+                        <span class="position">Line: 1, Column: 1</span>
                     <span class="copy">
                         Copy selection: <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="110" height="14" id="clippy">
                         <param name="movie" value="clippy/clippy.swf"/>
@@ -206,29 +220,39 @@ if (isset($_POST['code'])) {
                             />
                     </object>
                     </span>
+                    </div>
+                </div>
+                <input id="try-this" type="submit" name="subm" value="Try this!" class="btn btn-large btn-success" />
+                <input id="save-snippet" type="button" name="save-snippet" value="Save Snippet!" class="btn btn-primary" />
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span4">
+            <div class="help">
+                debug:
+                &lt; foo()
+                krumo(foo());
             </div>
         </div>
-        <input id="try-this" type="submit" name="subm" value="Try this!" class="btn btn-large btn-success" />
-        <input id="save-snippet" type="button" name="save-snippet" value="Save Snippet!" class="btn btn-primary" />
-    </form>
-    <div class="help">
-        debug:
-        &lt; foo()
-        krumo(foo());
-    </div>
-    <div class="help">
-        commands:
-        krumo::backtrace();
-        krumo::includes();
-        krumo::functions();
-        krumo::classes();
-        krumo::defines();
-    </div>
-    <div class="help">
-        misc:
-        press ctrl-enter to submit
-        put '#\n' on the first line to enforce
-        \n line breaks (\r\n etc work too)
+        <div class="span4">
+            <div class="help">
+                commands:
+                krumo::backtrace();
+                krumo::includes();
+                krumo::functions();
+                krumo::classes();
+                krumo::defines();
+            </div>
+        </div>
+        <div class="span4">
+            <div class="help">
+                misc:
+                press ctrl-enter to submit
+                put '#\n' on the first line to enforce
+                \n line breaks (\r\n etc work too)
+            </div>
+        </div>
     </div>
 </div>
 
@@ -249,6 +273,8 @@ if (isset($_POST['code'])) {
             $('#expandable-snippets').slideToggle();
             $('#expand-snippets-icon').toggleClass('icon-minus-sign');
         });
+
+        $('.dropdown-toggle').dropdown()
     });
 
 </script>
