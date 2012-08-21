@@ -148,23 +148,25 @@ if (isset($_POST['code'])) {
             <h3 id="slideToggleSnippets">
                 <i id="expand-snippets-icon" class="icon-plus-sign"></i>Snippets: </h3>
             <div id="expandable-snippets" style="display: none">
+
+                <ul id="snippet-container" class="nav nav-pills nav-stacked">
+                </ul>
                 <script id="snippetsTemplate" type="text/x-jQuery-tmpl">
-                    <ul class="nav nav-pills nav-stacked">
-                        <li class="active row">
-                            <a
-                                class="load-snippet span2"
-                                data-project="${snippetProject}"
-                                data-label="${snippetLabel}"
-                                onClick="TFSN.LocalStorageHelper.checkSnippet(this)"
-                                >
-                                ${snippetProject}: ${snippetLabel}
-                            </a>
-                            <i class="preview-snippet icon-plus-sign"></i>
-                            <i class="remove-snippet icon icon-remove-sign"></i>
-                            <pre class="prettyprint linenums span6" style="display: none;">${snippetCode}</pre>
-                        </li>
-                    </ul>
+                    <li class="active row">
+                        <a
+                            class="load-snippet span2"
+                            data-project="${snippetProject}"
+                            data-label="${snippetLabel}"
+                            onClick="TFSN.LocalStorageHelper.checkSnippet(this)"
+                            >
+                            ${snippetProject}: ${snippetLabel}
+                        </a>
+                        <i class="preview-snippet icon-plus-sign"></i>
+                        <i class="remove-snippet icon icon-remove-sign"></i>
+                        <pre class="prettyprint linenums span6" style="display: none;">${snippetCode}</pre>
+                    </li>
                 </script>
+
                 <span class="row">
                     <button id="clearSnippets" class="btn btn-danger">Remove All Snippets <i class="icon-white icon-minus-sign"></i></button>
                 </span>

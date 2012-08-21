@@ -14,7 +14,7 @@ TFSN.LocalStorageHelper.prototype = {
     initialize: function(localStorageKey){
         this.localStorageKey = localStorageKey;
         this.snippetsTemplate = '#snippetsTemplate';
-        this.eleToAttachTemplates = '#expandable-snippets';
+        this.eleToAttachTemplates = '#snippet-container';
         this.snippetsWrapper = '#snippets-wrapper';
         this.clearSnippetsBtn = '#clearSnippets';
         this.arrayOfSnippets = [];
@@ -94,8 +94,9 @@ TFSN.LocalStorageHelper.prototype = {
 
     checkForExistingSnippets : function(){
         this.arrayOfSnippets = this.getArrayOfStorage();
-
+        $(this.eleToAttachTemplates).empty();
         for(var i = 0; i < this.arrayOfSnippets.length; i++){
+            console.log($(this.eleToAttachTemplates));
             $(this.snippetsTemplate).tmpl(this.arrayOfSnippets[i]).appendTo(this.eleToAttachTemplates);
         }
 
@@ -109,20 +110,21 @@ TFSN.LocalStorageHelper.prototype = {
 
     loadSnippetsSliders : function(){
         $('i.preview-snippet').click(function(){
-            $(this).next('pre').slideToggle();
+            $(this).parent().find('pre').slideToggle();
             $(this).toggleClass('icon-minus-sign');
         });
 
         this.arrayOfSnippets = this.getArrayOfStorage();
         var parent = this;
         $('.remove-snippet').click(function(){
-            var elem = $(this).prev().prev('a');
+            var elem = $(this).parent().find('a');
             var thisProject = elem.attr('data-project');
             var thisLabel = elem.attr('data-label');
             for(var i = 0; i < parent.arrayOfSnippets.length; i++){
                 if(parent.arrayOfSnippets[i].snippetProject == thisProject && parent.arrayOfSnippets[i].snippetLabel == thisLabel){
                     parent.arrayOfSnippets.splice(i, 1);
-                    localStorage.setItem(parent.localStorageKey, JSON.stringify(parent.arrayOfSnippets));
+                    parent.setLocalStorage();
+//                    localStorage.setItem(parent.localStorageKey, JSON.stringify(parent.arrayOfSnippets));
                     parent.checkForExistingSnippets();
                     break;
                 }
