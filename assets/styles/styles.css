@@ -59,7 +59,7 @@ a {
 /* ace-editor requires to define styles by id (specificity) */
 .editor#editor {
     width: 100%;
-    height: 700px;
+    height: 300px;
     position: relative;
     -webkit-border-top-right-radius: 5px;
     -moz-border-radius-topright: 5px;
