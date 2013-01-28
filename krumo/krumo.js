@@ -24,8 +24,8 @@ function krumo() {
 */
 krumo.reclass = function(el, className) {
 	if (el.className.indexOf(className) < 0) {
-		el.className += (' ' + className);
-		}
+	el.className += (' ' + className);
+	}
 	}
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
@@ -39,8 +39,8 @@ krumo.reclass = function(el, className) {
 */
 krumo.unclass = function(el, className) {
 	if (el.className.indexOf(className) > -1) {
-		el.className = el.className.replace(className, '');
-		}
+	el.className = el.className.replace(className, '');
+	}
 	}
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
@@ -54,20 +54,20 @@ krumo.unclass = function(el, className) {
 krumo.toggle = function(el) {
 	var ul = el.parentNode.getElementsByTagName('ul');
 	for (var i=0; i<ul.length; i++) {
-		if (ul[i].parentNode.parentNode == el.parentNode) {
-			ul[i].parentNode.style.display = (ul[i].parentNode.style.display == 'none')
-				? 'block'
-				: 'none';
-			}
+	if (ul[i].parentNode.parentNode == el.parentNode) {
+		ul[i].parentNode.style.display = (ul[i].parentNode.style.display == 'none')
+		? 'block'
+		: 'none';
 		}
+	}
 
 	// toggle class
 	//
 	if (ul[0].parentNode.style.display == 'block') {
-		krumo.reclass(el, 'krumo-opened');
-		} else {
-		krumo.unclass(el, 'krumo-opened');
-		}
+	krumo.reclass(el, 'krumo-opened');
+	} else {
+	krumo.unclass(el, 'krumo-opened');
+	}
 	}
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
