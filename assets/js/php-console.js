@@ -68,7 +68,7 @@ var editor;
         e.preventDefault();
         $('div.output').html('<img src="../assets/img/loader.gif" class="loader" alt="" /> Loading ...');
 
-        var params = '?js=1&' + window.location.href.slice(window.location.href.indexOf('?') + 1);
+        var params = '?js=1&' + window.location.href.slice(window.location.href.indexOf('?') + 1) + '&isAdmin=' + ($('#run_as_admin').is(':checked') ? '0' : '1');
 
         $.post(params, { code: editor.getSession().getValue() }, function(res) {
             if (res.match(/#end-php-console-output#$/)) {

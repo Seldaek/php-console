@@ -34,7 +34,7 @@ if(array_key_exists('a', $params) && $params['a'] == 'debug' && array_key_exists
         Varien_Profiler::enable();
         Mage::setIsDeveloperMode(true);
         umask(0);
-        Mage::app();
+        Mage::app((array_key_exists('isAdmin', $params) && $params['isAdmin']) ? 'admin' : '');
         $title = '<img src="' . Mage::getDesign()->getSkinUrl() . Mage::getStoreConfig('design/header/logo_src') .  '" /><br />';
         $title .= (array_key_exists('site', $params) ? $params['site'] . ' (<a target="_blank" href="' . Mage::app()->getStore()->getBaseUrl() . '">' . Mage::app()->getStore()->getBaseUrl() . '</a>)': '');
     }
@@ -142,7 +142,7 @@ if (isset($_POST['code'])) {
         </span>
     </div>
     <div class="row">
-        <div class="span4">
+        <div class="span2">
             <div class="btn-group">
                 <a class="btn dropdown-toggle btn-large btn-info" data-toggle="dropdown" href="#">
                     Projects
@@ -152,6 +152,11 @@ if (isset($_POST['code'])) {
                     <?php echo $projectsList ?>
                 </ul>
             </div>
+        </div>
+        <div class="span2">
+            <label class="checkbox" for="">
+                <input type="checkbox" name="run_as_admin" id="run_as_admin"> Run as Admin?
+            </label>
         </div>
         <div id="snippets-wrapper" class="span8">
             <h3 id="slideToggleSnippets">
@@ -163,7 +168,7 @@ if (isset($_POST['code'])) {
                 <script id="snippetsTemplate" type="text/x-jQuery-tmpl">
                     <li class="active row">
                         <a
-                            class="load-snippet span4"
+                            class="load-snippet span7"
                             data-project="${snippetProject}"
                             data-label="${snippetLabel}"
                             onClick="TFSN.LocalStorageHelper.checkSnippet(this)"
