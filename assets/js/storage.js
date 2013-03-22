@@ -13,6 +13,7 @@ TFSN.LocalStorageHelper = function() {};
 TFSN.LocalStorageHelper.prototype = {
     initialize: function(localStorageKey){
         this.localStorageKey = localStorageKey;
+        this.lastSavedStorageKey = 'LastSavedSnippet';
         this.snippetsTemplate = '#snippetsTemplate';
         this.eleToAttachTemplates = '#snippet-container';
         this.snippetsWrapper = '#snippets-wrapper';
@@ -21,6 +22,24 @@ TFSN.LocalStorageHelper.prototype = {
 
         this.loadSaveSnippetsListeners();
         this.checkForExistingSnippets();
+        this.loadLastSaved();
+        this.listenForLastSaved();
+
+    },
+
+    loadLastSaved: function(){
+        $(document).ready(function(){
+            editor.getSession().setValue(localStorage.getItem(this.lastSavedStorageKey) ? localStorage.getItem(this.lastSavedStorageKey) : '');
+        });
+    },
+
+    listenForLastSaved: function(){
+        $(document).ready(function(){
+            $('#editor textarea').keyup(function(){
+                var snippetCode = editor.getSession().getValue();
+                localStorage.setItem(this.lastSavedStorageKey, snippetCode);
+            });
+        });
     },
 
     getArrayOfStorage: function(){
