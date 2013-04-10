@@ -7,6 +7,8 @@ Creating a test file or using php's interactive mode can be a bit cumbersome to 
 
 It is secure since accessible only from the local host, and very easy to setup and use.
 
+To install either git clone this repo or using Composer: `composer create-project seld/php-console`.
+
 Screenshot
 ----------
 
