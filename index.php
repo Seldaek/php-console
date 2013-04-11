@@ -24,7 +24,7 @@ php-console will only load if it is either launched from localhost or in a direc
 that requires HTTP authentication.
 */
 $httpAuth = false; // Assume no authorization
-if(isset($_SERVER['REMOTE_USER']) && !empty($_SERVER['REMOTE_USER'])){
+if(!empty($_SERVER['REMOTE_USER'])){
 	// The remote user is authorized
 	$httpAuth = true;
 } else if(function_exists('apache_request_headers') &&
