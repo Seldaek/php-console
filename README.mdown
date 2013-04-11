@@ -33,6 +33,9 @@ Jordi Boggiano - <j.boggiano@seld.be><br />
 Changelog
 ---------
 
+- 1.2.2
+  - Updated ACE to latest version
+  - Added composer.json support
 - 1.2.1
   - Performance fixes for ACE editor integration
   - JS is no longer a requirement
