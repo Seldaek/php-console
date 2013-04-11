@@ -23,9 +23,17 @@ $options = array(
 php-console will only load if it is either launched from localhost or in a directory
 that requires HTTP authentication.
 */
-$passwordProtected = isset($_SERVER['REMOTE_USER']) || isset($_SERVER['PHP_AUTH_USER']);
+$httpAuth = false; // Assume no authorization
+if(isset($_SERVER['REMOTE_USER']) && !empty($_SERVER['REMOTE_USER'])){
+	// The remote user is authorized
+	$httpAuth = true;
+} else if(function_exists('apache_request_headers') &&
+			array_key_exists('Authorization', apache_request_headers())){
+	// The Apache Web Server acknowledges authorization
+	$httpAuth = true;
+}
 
-if (!in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'), true) && !$passwordProtected) {
+if (!in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'), true) && !$httpAuth) {
     header('HTTP/1.1 401 Access unauthorized');
     die('ERR/401 Go Away');
 }
