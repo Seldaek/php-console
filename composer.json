@@ -3,7 +3,7 @@
     "description": "A console to quickly try and run PHP code in your browser",
     "keywords": ["console", "php"],
     "homepage": "http://github.com/Seldaek/php-console",
-    "type": "library",
+    "type": "project",
     "license": "BSD-3-Clause",
     "authors": [
         {
