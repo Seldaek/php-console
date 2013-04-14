@@ -18,7 +18,22 @@ $options = array(
  *
  * Source on Github http://github.com/Seldaek/php-console
  */
-if (!in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'), true)) {
+
+ /* 
+php-console will only load if it is either launched from localhost or in a directory
+that requires HTTP authentication.
+*/
+$httpAuth = false; // Assume no authorization
+if(!empty($_SERVER['REMOTE_USER'])){
+	// The remote user is authorized
+	$httpAuth = true;
+} else if(function_exists('apache_request_headers') &&
+			array_key_exists('Authorization', apache_request_headers())){
+	// The Apache Web Server acknowledges authorization
+	$httpAuth = true;
+}
+
+if (!in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'), true) && !$httpAuth) {
     header('HTTP/1.1 401 Access unauthorized');
     die('ERR/401 Go Away');
 }
@@ -31,6 +46,8 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL | E_STRICT);
 
 $debugOutput = '';
+$newLineBreak = '';
+$showLineBreaks = false;
 
 if (isset($_POST['code'])) {
     $code = $_POST['code'];
@@ -50,7 +67,8 @@ if (isset($_POST['code'])) {
     // replace newlines in the entire code block by the new specified one
     // i.e. put #\r\n on the first line to emulate a file with windows line
     // endings if you're on a unix box
-    if (preg_match('{#((?:\\\\[rn]){1,2})}', $code, $m)) {
+    if (preg_match('{^#((?:\\\\[rn]){1,2})}', $code, $m)) {
+        $showLineBreaks = true;
         $newLineBreak = str_replace(array('\\n', '\\r'), array("\n", "\r"), $m[1]);
         $code = preg_replace('#(\r?\n|\r\n?)#', $newLineBreak, $code);
     }
@@ -61,7 +79,7 @@ if (isset($_POST['code'])) {
 
     if (isset($_GET['js'])) {
         header('Content-Type: text/plain');
-        echo $debugOutput;
+        echo $showLineBreaks ? preg_replace("#$newLineBreak#", "<br />", $debugOutput) : $debugOutput;
         die('#end-php-console-output#');
     }
 }

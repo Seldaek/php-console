@@ -122,4 +122,4 @@
             $('form').submit(handleSubmit);
         });
     };
-}(ace.require, jQuery, ace));
+}(require, jQuery, ace));
