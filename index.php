@@ -90,8 +90,8 @@ if (isset($_POST['code'])) {
         <title>Debug Console</title>
         <link rel="stylesheet" type="text/css" href="styles.css" />
         <script src="jquery-1.7.1.min.js"></script>
-        <script src="ace/ace.js"></script>
-        <script src="ace/mode-php.js"></script>
+        <script src="ace/ace.js" charset="utf-8"></script>
+        <script src="ace/mode-php.js" charset="utf-8"></script>
         <script src="php-console.js"></script>
         <script>
             $.console({

@@ -1,0 +1,23 @@
+{
+    "name": "seld/php-console",
+    "description": "A console to quickly try and run PHP code in your browser",
+    "keywords": ["console", "php"],
+    "homepage": "http://github.com/Seldaek/php-console",
+    "type": "project",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Jordi Boggiano",
+            "email": "j.boggiano@seld.be",
+            "homepage": "http://seld.be"
+        }
+    ],
+    "require": {
+        "php": ">=5.2.0"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.3.x-dev"
+        }
+    }
+}

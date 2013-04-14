@@ -7,6 +7,8 @@ Creating a test file or using php's interactive mode can be a bit cumbersome to 
 
 It is secure since accessible only from the local host, and very easy to setup and use.
 
+To install either git clone this repo or using Composer: `composer create-project seld/php-console`.
+
 Screenshot
 ----------
 
@@ -31,6 +33,9 @@ Jordi Boggiano - <j.boggiano@seld.be><br />
 Changelog
 ---------
 
+- 1.2.2
+  - Updated ACE to latest version
+  - Added composer.json support
 - 1.2.1
   - Performance fixes for ACE editor integration
   - JS is no longer a requirement
