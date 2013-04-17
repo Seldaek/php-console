@@ -33,11 +33,11 @@ error_reporting(E_ALL | E_STRICT);
 $debugOutput = '';
 
 if (isset($_POST['code'])) {
-    $code = $_POST['code'];
-
     if (get_magic_quotes_gpc()) {
         $code = stripslashes($code);
     }
+
+    $code = trim(preg_replace('{^\s*<\?(php)?}i', '', $_POST['code']));
 
     // if there's only one line wrap it into a krumo() call
     if (preg_match('#^(?!var_dump|echo|print|< )([^\r\n]+?);?\s*$#is', $code, $m) && trim($m[1])) {
@@ -88,7 +88,7 @@ if (isset($_POST['code'])) {
         <div class="output"><?php echo $debugOutput ?></div>
         <form method="POST" action="">
             <div class="input">
-                <textarea class="editor" id="editor" name="code"><?php echo (isset($_POST['code']) ? htmlentities($_POST['code'], ENT_QUOTES, 'UTF-8') : null) ?></textarea>
+                <textarea class="editor" id="editor" name="code"><?php echo (isset($_POST['code']) ? htmlentities($_POST['code'], ENT_QUOTES, 'UTF-8') : "&lt;?php\n\n") ?></textarea>
                 <div class="statusbar">
                     <span class="position">Line: 1, Column: 1</span>
                     <span class="copy">
