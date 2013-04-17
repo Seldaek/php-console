@@ -18,7 +18,22 @@ $options = array(
  *
  * Source on Github http://github.com/Seldaek/php-console
  */
-if (!in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'), true)) {
+
+ /* 
+php-console will only load if it is either launched from localhost or in a directory
+that requires HTTP authentication.
+*/
+$httpAuth = false; // Assume no authorization
+if(!empty($_SERVER['REMOTE_USER'])){
+	// The remote user is authorized
+	$httpAuth = true;
+} else if(function_exists('apache_request_headers') &&
+			array_key_exists('Authorization', apache_request_headers())){
+	// The Apache Web Server acknowledges authorization
+	$httpAuth = true;
+}
+
+if (!in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'), true) && !$httpAuth) {
     header('HTTP/1.1 401 Access unauthorized');
     die('ERR/401 Go Away');
 }
@@ -134,6 +149,11 @@ if (isset($_POST['code'])) {
             press ctrl-enter to submit
             put '#\n' on the first line to enforce
                 \n line breaks (\r\n etc work too)
+            <span style="color:blue">put '#&lt;?' on the first line to turn on
+                syntax highlighting
+            put '#?&gt;' on the first line to treat code
+                like a PHP file (i.e. HTML/CSS with PHP 
+                enclosed in server tags)</span>
         </div>
         <div class="footer">
             php-console v<?php echo PHP_CONSOLE_VERSION ?> - by <a href="http://seld.be/">Jordi Boggiano</a> - <a href="http://github.com/Seldaek/php-console">sources on github</a>
