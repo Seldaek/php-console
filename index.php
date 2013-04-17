@@ -149,6 +149,11 @@ if (isset($_POST['code'])) {
             press ctrl-enter to submit
             put '#\n' on the first line to enforce
                 \n line breaks (\r\n etc work too)
+            <span style="color:blue">put '#&lt;?' on the first line to turn on
+                syntax highlighting
+            put '#?&gt;' on the first line to treat code
+                like a PHP file (i.e. HTML/CSS with PHP 
+                enclosed in server tags)</span>
         </div>
         <div class="footer">
             php-console v<?php echo PHP_CONSOLE_VERSION ?> - by <a href="http://seld.be/">Jordi Boggiano</a> - <a href="http://github.com/Seldaek/php-console">sources on github</a>
