@@ -80,9 +80,8 @@
         var PhpMode, code;
 
         code = $('#' + options.editor).text();
-        $('#' + options.editor)
-            .replaceWith('<div id="'+options.editor+'" class="'+options.editor+'"></div>')
-            .text(code);
+        $('#' + options.editor).replaceWith('<div id="'+options.editor+'" class="'+options.editor+'"></div>');
+        $('#' + options.editor).text(code);
 
         editor = ace.edit(options.editor);
 
