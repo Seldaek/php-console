@@ -18,6 +18,11 @@ a {
     color: #88f;
 }
 
+.expand {
+	display: block;
+	margin-bottom: 5px;
+}
+
 .output, .input {
     border: 1px solid #aaa;
     background: #fff;
