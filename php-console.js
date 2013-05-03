@@ -85,11 +85,8 @@
 
         editor = ace.edit(options.editor);
 
-        // give focus
         editor.focus();
-        
-        // move cursor to line 2
-        editor.gotoLine(2,0);
+        editor.gotoLine(3,0);
 
         // set mode
         PhpMode = require("ace/mode/php").Mode;
