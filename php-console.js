@@ -85,6 +85,9 @@
 
         editor = ace.edit(options.editor);
 
+        editor.focus();
+        editor.gotoLine(3,0);
+
         // set mode
         PhpMode = require("ace/mode/php").Mode;
         editor.getSession().setMode(new PhpMode());
