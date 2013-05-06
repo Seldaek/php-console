@@ -274,7 +274,7 @@ This is a list of all HTTP request headers.
 			return false;
 			}
 
-		if (!readable(get_cfg_var('cfg_file_path'))) {
+		if (!is_readable(get_cfg_var('cfg_file_path'))) {
 			return false;
 			}
 
