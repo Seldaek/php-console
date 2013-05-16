@@ -19,8 +19,8 @@ a {
 }
 
 .expand {
-	display: block;
-	margin-bottom: 5px;
+    display: block;
+    margin-bottom: 5px;
 }
 
 .output, .input {
@@ -84,6 +84,51 @@ a {
     width: 33%;
     float: left;
     white-space: pre;
+}
+
+#options {
+    clear: left;
+    width: 40em;
+}
+
+#options .option {
+    cursor: default;
+    margin-bottom: 5px;
+    padding: 3px;
+}
+
+#options .option.selected {
+	background-color: lightgray;
+}
+
+#options .option:hover {
+    background-color: #bababa;
+}
+
+#options .option.selected, #options .option.selected .info{
+    color: navy;
+}
+
+#options input {
+    display: inline;
+    height: 12px;
+    width: 12px;
+    vertical-align: middle;
+}
+
+#options .info {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    color: #5A5A5A;
+    font-style: oblique;
+}
+
+#options .info:before {
+    content: "(";
+}
+
+#options .info:after {
+    content: ")";
 }
 
 .footer {

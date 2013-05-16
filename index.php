@@ -135,6 +135,18 @@ if (isset($_POST['code'])) {
             put '#\n' on the first line to enforce
                 \n line breaks (\r\n etc work too)
         </div>
+        <div id="options">
+			<div class="option selected">
+				<input id="behaviours" type="checkbox" checked="true" />
+				<span>Behaviours</span>
+				<span class="info">Automatically pair special charcters like quotation marks, parentheses, etc</span>
+			</div>
+            <div class="option selected">
+                <input id="widgets" type="checkbox" checked="true" />
+                <span>Widgets</span>
+                <span class="info">Collapse and expand code blocks</span>
+            </div>
+        </div>
         <div class="footer">
             php-console v<?php echo PHP_CONSOLE_VERSION ?> - by <a href="http://seld.be/">Jordi Boggiano</a> - <a href="http://github.com/Seldaek/php-console">sources on github</a>
         </div>

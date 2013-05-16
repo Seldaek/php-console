@@ -101,7 +101,50 @@
         if (window.navigator.userAgent.indexOf('Opera/') === 0) {
             editor.getSession().selection.on('changeSelection', prepareClippyButton);
         }
-
+        
+        /* 
+        Make sure the .option checkboxes are selected when the page first loads.
+        The browser may preserve the checkbox's last state before page reload without this.
+        */
+        var checkboxes = $(".option").find(":checkbox");
+        checkboxes.each(function(){
+            $(this).get()[0].checked = true;
+        });
+        
+        /*
+        The click event should respond to the checkbox changing state regardless
+        of the method of changing it (click, touch, keyboard, etc).
+        */
+        $(".option").click(function(event){
+            // The checkbox being toggled
+            var input = $(this).find("input")[0];           
+            
+            /* 
+            Toggle the checkbox if clicking on .option, but rely on the
+            checkbox's default behavior if it is the actual target.
+            */
+            if(event.target !== input){
+                input.checked = !input.checked;
+            }
+            
+			// Change the appearance depending on the selected state
+            if(input.checked){              
+                $(this).addClass("selected");
+            } else {
+                $(this).removeClass("selected");
+            }
+            
+			// Determine which option was toggled
+            if($(input).attr("id") === "behaviours"){
+                editor.setBehavioursEnabled(input.checked);
+            } else if($(input).attr("id") === "widgets"){
+                editor.setShowFoldWidgets(input.checked)
+            }
+            
+			// Give focus to the editor
+            editor.focus();
+        });
+        
         // commands
         editor.commands.addCommand({
             name: 'submitForm',
