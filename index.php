@@ -1,5 +1,5 @@
 <?php
-
+ini_set('memory_limit', '1G');
 ini_set('display_errors', 1);
 
 $options = array(
@@ -55,8 +55,10 @@ if(array_key_exists('a', $params) && $params['a'] == 'debug' && array_key_exists
  * Source on Github http://github.com/Seldaek/php-console
  */
 if (!in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'), true)) {
-    header('HTTP/1.1 401 Access unauthorized');
-    die('ERR/401 Go Away');
+    if(!file_exists('remote.flag')) {
+    	header('HTTP/1.1 401 Access unauthorized');
+    	die('ERR/401 Go Away');
+    }
 }
 
 define('PHP_CONSOLE_VERSION', '1.3.0-dev');
