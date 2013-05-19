@@ -77,6 +77,7 @@ if (isset($_POST['code'])) {
         <script src="jquery-1.9.1.min.js"></script>
         <script src="ace/ace.js" charset="utf-8"></script>
         <script src="ace/mode-php.js" charset="utf-8"></script>
+        <script src="storage.js" charset="utf-8"></script>
         <script src="php-console.js"></script>
         <script>
             $.console({
@@ -135,18 +136,19 @@ if (isset($_POST['code'])) {
             put '#\n' on the first line to enforce
                 \n line breaks (\r\n etc work too)
         </div>
-        <div id="options">
-			<div class="option selected">
-				<input id="behaviours" type="checkbox" checked="true" />
+		<div id="options" style="display: block;">
+		<a id="popoutButton" title="Editor Options (Click to show/hide)">&#10151;</a>
+		<ul id="optionslist">
+			<li class="option">
+				<input id="behaviours" type="checkbox">
 				<span>Behaviours</span>
-				<span class="info">Automatically pair special charcters like quotation marks, parentheses, etc</span>
-			</div>
-            <div class="option selected">
-                <input id="widgets" type="checkbox" checked="true" />
-                <span>Widgets</span>
-                <span class="info">Collapse and expand code blocks</span>
-            </div>
-        </div>
+			</li>
+			<li class="option">
+				<input id="widgets" type="checkbox">
+				<span>Widgets</span>
+			</li>
+		</ul>
+		</div>
         <div class="footer">
             php-console v<?php echo PHP_CONSOLE_VERSION ?> - by <a href="http://seld.be/">Jordi Boggiano</a> - <a href="http://github.com/Seldaek/php-console">sources on github</a>
         </div>

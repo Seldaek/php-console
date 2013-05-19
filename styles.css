@@ -86,14 +86,23 @@ a {
     white-space: pre;
 }
 
+#popoutButton{
+	color: black;
+	font-size: 3.5em;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+#popoutButton:hover{
+	color: #88f;
+}
+
 #options {
     clear: left;
-    width: 40em;
 }
 
 #options .option {
     cursor: default;
-    margin-bottom: 5px;
     padding: 3px;
 }
 
@@ -129,6 +138,17 @@ a {
 
 #options .info:after {
     content: ")";
+}
+
+#optionslist {
+    display: inline;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#optionslist li{
+	display: inline;
 }
 
 .footer {
