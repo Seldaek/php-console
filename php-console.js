@@ -101,7 +101,92 @@
         if (window.navigator.userAgent.indexOf('Opera/') === 0) {
             editor.getSession().selection.on('changeSelection', prepareClippyButton);
         }
-
+        
+        $("#popoutButton").click(function(event){
+        	$("#optionslist").toggle();
+        });
+        
+        /**
+         * Intitializes the editor options UI on page load.
+         * 
+         * @param String option The name of the option being setup 
+         */
+        function initializeOptions(option){
+        	// The DOM element of each checkbox
+        	var checkbox = $("#" + option).get()[0];
+        	// The <li> container each checkbox is in
+        	var container = $(checkbox.parentElement);
+        	
+        	if(!window.localStorage.getItem(option)){ // The option has not yet been selected
+        		// Select each option by default
+        		checkbox.checked = true;
+        		//getItem() will return the second parameter as a string
+        		window.localStorage.setItem(option, 1); 
+        	} else { // The option has been selected before
+        		// Retain the last setting for this option
+        		checkbox.checked = Number(window.localStorage.getItem(option)); 
+        	}
+        	
+        	// If the option is on, highlight its container
+        	if(checkbox.checked){
+        		container.addClass("selected");
+			}
+        	
+        	// Cases can be added for future additional options
+        	switch(option){
+        		case "behaviours":
+        			 container.attr("title", "Automatically pair special charcters like quotation marks, parentheses, etc.");
+        			 editor.setBehavioursEnabled(checkbox.checked);
+        			 break;
+        		case "widgets":
+        			container.attr("title", "Collapse and expand code blocks");
+        			editor.setShowFoldWidgets(checkbox.checked);
+        			break;
+        	}
+        }
+        
+    	initializeOptions("behaviours");
+        initializeOptions("widgets");
+        
+        // Hide the options list by default
+        $("#optionslist").hide();
+        
+        /*
+        The click event should respond to the checkbox changing state regardless
+        of the method of changing it (click, touch, keyboard, etc).
+        */
+        $(".option").click(function(event){
+            // The checkbox being toggled
+            var input = $(this).find("input")[0];           
+            
+            /* 
+            Toggle the checkbox if clicking on .option, but rely on the
+            checkbox's default behavior if it is the actual target.
+            */
+            if(event.target !== input){
+                input.checked = !input.checked;
+            }
+            
+			// Change the appearance depending on the selected state
+            if(input.checked){              
+                $(this).addClass("selected");
+            } else {
+                $(this).removeClass("selected");
+            }
+            
+			// Determine which option was toggled
+            if($(input).attr("id") === "behaviours"){
+                editor.setBehavioursEnabled(input.checked);
+                window.localStorage.setItem("behaviours", Number(input.checked));
+            } else if($(input).attr("id") === "widgets"){
+                editor.setShowFoldWidgets(input.checked);
+                window.localStorage.setItem("widgets", Number(input.checked));
+            }
+            
+			// Give focus to the editor
+            editor.focus();
+        });
+        
         // commands
         editor.commands.addCommand({
             name: 'submitForm',
