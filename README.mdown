@@ -33,6 +33,10 @@ Jordi Boggiano - <j.boggiano@seld.be><br />
 Changelog
 ---------
 
+- 1.2.3
+  - Fixed syntax highlighting
+  - Fixed some styling issues
+  - Fixed ajax error handling for non responding backends
 - 1.2.2
   - Updated ACE to latest version
   - Added composer.json support
