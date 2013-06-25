@@ -75,6 +75,11 @@
             refreshKrumoState();
         });
     };
+    
+    handleAjaxError = function(event, jqxhr, settings, exception) {
+        $('div.output').html("<em>Error occured while posting your code.</em>");
+        refreshKrumoState();
+    };
 
     initializeAce = function() {
         var PhpMode, code;
@@ -120,6 +125,7 @@
 
         $(function() {
             $(document).ready(initializeAce);
+            $(document).ajaxError(handleAjaxError);
 
             $('form').submit(handleSubmit);
         });
