@@ -1,3 +1,5 @@
+/*jslint browser: true */
+/*global ace, jQuery */
 /**
  * PHP Console
  *
@@ -11,10 +13,10 @@
  *
  * Source on Github http://github.com/Seldaek/php-console
  */
-(function(require, $, ace) {
+(function (require, $, ace) {
     "use strict";
 
-    var updateStatusBar, prepareClippyButton, refreshKrumoState, handleSubmit, initializeAce,
+    var updateStatusBar, prepareClippyButton, refreshKrumoState, handleSubmit, initializeAce, handleAjaxError,
         options, editor;
     options = {
         tabsize: 4,
@@ -24,15 +26,15 @@
     /**
      * updates the text of the status bar
      */
-    updateStatusBar = function(e) {
+    updateStatusBar = function (e) {
         var cursor_position = editor.getCursorPosition();
-        $('.statusbar .position').text('Line: ' + (1+cursor_position.row) + ', Column: ' + cursor_position.column);
+        $('.statusbar .position').text('Line: ' + (1 + cursor_position.row) + ', Column: ' + cursor_position.column);
     };
 
     /**
      * prepares a clippy button for clipboard access
      */
-    prepareClippyButton = function(e) {
+    prepareClippyButton = function (e) {
         var selection = editor.getSession().doc.getTextRange(editor.getSelectionRange());
         if (!selection) {
             $('.statusbar .copy').hide();
@@ -46,11 +48,11 @@
     /**
      * adds a toggle button to expand/collapse all krumo sub-trees at once
      */
-    refreshKrumoState = function() {
+    refreshKrumoState = function () {
         if ($('.krumo-expand').length > 0) {
             $('<a class="expand" href="#">Toggle all</a>')
-                .click(function(e) {
-                    $('div.krumo-element.krumo-expand').each(function(idx, el) {
+                .click(function (e) {
+                    $('div.krumo-element.krumo-expand').each(function (idx, el) {
                         window.krumo.toggle(el);
                     });
                     e.preventDefault();
@@ -62,36 +64,51 @@
     /**
      * does an async request to eval the php code and displays the result
      */
-    handleSubmit = function(e) {
+    handleSubmit = function (e) {
         e.preventDefault();
         $('div.output').html('<img src="loader.gif" class="loader" alt="" /> Loading ...');
 
-        $.post('?js=1', { code: editor.getSession().getValue() }, function(res) {
+        // store session
+        if (window.localStorage) {
+            localStorage.setItem('phpCode', editor.getSession().getValue());
+        }
+
+        // eval server-side
+        $.post('?js=1', { code: editor.getSession().getValue() }, function (res) {
             if (res.match(/#end-php-console-output#$/)) {
-                $('div.output').html(res.substring(0, res.length-24));
+                $('div.output').html(res.substring(0, res.length - 24));
             } else {
                 $('div.output').html(res + "<br /><br /><em>Script ended unexpectedly.</em>");
             }
             refreshKrumoState();
         });
     };
-    
-    handleAjaxError = function(event, jqxhr, settings, exception) {
+
+    handleAjaxError = function (event, jqxhr, settings, exception) {
         $('div.output').html("<em>Error occured while posting your code.</em>");
         refreshKrumoState();
     };
 
-    initializeAce = function() {
-        var PhpMode, code;
+    initializeAce = function () {
+        var PhpMode, code, storedCode;
 
         code = $('#' + options.editor).text();
-        $('#' + options.editor).replaceWith('<div id="'+options.editor+'" class="'+options.editor+'"></div>');
+
+        // reload last session
+        if (window.localStorage && code.match(/(<\?php)?\s*/)) {
+            storedCode = localStorage.getItem('phpCode');
+            if (storedCode) {
+                code = storedCode;
+            }
+        }
+
+        $('#' + options.editor).replaceWith('<div id="' + options.editor + '" class="' + options.editor + '"></div>');
         $('#' + options.editor).text(code);
 
         editor = ace.edit(options.editor);
 
         editor.focus();
-        editor.gotoLine(3,0);
+        editor.gotoLine(3, 0);
 
         // set mode
         PhpMode = require("ace/mode/php").Mode;
@@ -107,6 +124,17 @@
             editor.getSession().selection.on('changeSelection', prepareClippyButton);
         }
 
+        // reset button
+        if (window.localStorage) {
+            $('.statusbar .reset').on('click', function (e) {
+                editor.getSession().setValue('<?php\n\n');
+                editor.focus();
+                editor.gotoLine(3, 0);
+                window.localStorage.setItem('phpCode', '');
+                e.preventDefault();
+            });
+        }
+
         // commands
         editor.commands.addCommand({
             name: 'submitForm',
@@ -114,16 +142,16 @@
                 win: 'Ctrl-Return|Alt-Return',
                 mac: 'Command-Return|Alt-Return'
             },
-            exec: function(editor) {
+            exec: function (editor) {
                 $('form').submit();
             }
         });
     };
 
-    $.console = function(settings) {
+    $.console = function (settings) {
         $.extend(options, settings);
 
-        $(function() {
+        $(function () {
             $(document).ready(initializeAce);
             $(document).ajaxError(handleAjaxError);
 

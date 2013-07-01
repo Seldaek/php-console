@@ -23,7 +23,7 @@ if (!in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'), true)) {
     die('ERR/401 Go Away');
 }
 
-define('PHP_CONSOLE_VERSION', '1.3.0-dev');
+define('PHP_CONSOLE_VERSION', '1.3.0');
 require 'krumo/class.krumo.php';
 
 ini_set('log_errors', 0);
@@ -112,6 +112,7 @@ if (isset($_POST['code'])) {
                             />
                         </object>
                     </span>
+                    <a href="" class="reset">Reset</a>
                 </div>
             </div>
             <input type="submit" name="subm" value="Try this!" />
