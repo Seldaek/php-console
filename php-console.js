@@ -72,11 +72,28 @@
         if (window.localStorage) {
             localStorage.setItem('phpCode', editor.getSession().getValue());
         }
+        
+        var controlChars = {
+            'NUL' : /\x00/g,
+            'SOH' : /\x01/g,
+            'STX' : /\x02/g,
+            'ETX' : /\x03/g,
+            'EOT' : /\x04/g,
+            'ENQ' : /\x05/g,
+            'ACK' : /\x06/g,
+            'BEL' : /\x07/g,
+            'BS'  : /\x08/g,
+            'SUB' : /\x1A/g,
+        };
 
         // eval server-side
         $.post('?js=1', { code: editor.getSession().getValue() }, function (res) {
             if (res.match(/#end-php-console-output#$/)) {
-                $('div.output').html(res.substring(0, res.length - 24));
+                var result = res.substring(0, res.length - 24);
+                for (var k in controlChars) {
+                    result = result.replace(controlChars[k], '<span class="control-char">'+ k +'</span>');
+                }
+                $('div.output').html(result);
             } else {
                 $('div.output').html(res + "<br /><br /><em>Script ended unexpectedly.</em>");
             }
