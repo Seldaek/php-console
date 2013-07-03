@@ -33,6 +33,8 @@ Jordi Boggiano - <j.boggiano@seld.be><br />
 Changelog
 ---------
 
+- 1.4.0
+  - Added control-char escaping to make them more visible
 - 1.3.0
   - Added code persistence across sessions in localStorage + a reset button
 - 1.2.3

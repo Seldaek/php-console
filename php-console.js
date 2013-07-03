@@ -72,27 +72,44 @@
         if (window.localStorage) {
             localStorage.setItem('phpCode', editor.getSession().getValue());
         }
-        
+
         var controlChars = {
-            'NUL' : /\x00/g,
-            'SOH' : /\x01/g,
-            'STX' : /\x02/g,
-            'ETX' : /\x03/g,
-            'EOT' : /\x04/g,
-            'ENQ' : /\x05/g,
-            'ACK' : /\x06/g,
-            'BEL' : /\x07/g,
-            'BS'  : /\x08/g,
-            'SUB' : /\x1A/g,
+            'NUL' : /\x00/g, // Null char
+            'SOH' : /\x01/g, // Start of Heading
+            'STX' : /\x02/g, // Start of Text
+            'ETX' : /\x03/g, // End of Text
+            'EOT' : /\x04/g, // End of Transmission
+            'ENQ' : /\x05/g, // Enquiry
+            'ACK' : /\x06/g, // Acknowledgment
+            'BEL' : /\x07/g, // Bell
+            'BS'  : /\x08/g, // Back Space
+            'SO'  : /\x0E/g, // Shift Out / X-On
+            'SI'  : /\x0F/g, // Shift In / X-Off
+            'DLE' : /\x10/g, // Data Line Escape
+            'DC1' : /\x11/g, // Device Control 1 (oft. XON)
+            'DC2' : /\x12/g, // Device Control 2
+            'DC3' : /\x13/g, // Device Control 3 (oft. XOFF)
+            'DC4' : /\x14/g, // Device Control 4
+            'NAK' : /\x15/g, // Negative Acknowledgement
+            'SYN' : /\x16/g, // Synchronous Idle
+            'ETB' : /\x17/g, // End of Transmit Block
+            'CAN' : /\x18/g, // Cancel
+            'EM'  : /\x19/g, // End of Medium
+            'SUB' : /\x1A/g, // Substitute
+            'ESC' : /\x1B/g, // Escape
+            'FS'  : /\x1C/g, // File Separator
+            'GS'  : /\x1D/g, // Group Separator
+            'RS'  : /\x1E/g, // Record Separator
+            'US'  : /\x1F/g  // Unit Separator
         };
 
         // eval server-side
         $.post('?js=1', { code: editor.getSession().getValue() }, function (res) {
             if (res.match(/#end-php-console-output#$/)) {
                 var result = res.substring(0, res.length - 24);
-                for (var k in controlChars) {
-                    result = result.replace(controlChars[k], '<span class="control-char">'+ k +'</span>');
-                }
+                $.each(controlChars, function (identifier, regex) {
+                    result = result.replace(regex, '<span class="control-char">' + identifier + '</span>');
+                });
                 $('div.output').html(result);
             } else {
                 $('div.output').html(res + "<br /><br /><em>Script ended unexpectedly.</em>");
