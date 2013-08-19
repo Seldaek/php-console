@@ -37,7 +37,8 @@ if (isset($_POST['code'])) {
         $code = stripslashes($code);
     }
 
-    $code = trim(preg_replace('{^\s*<\?(php)?}i', '', $_POST['code']));
+    // Important: replace only line by line, so the generated source lines will map 1:1 to the initial user input!
+    $code = preg_replace('{^\s*<\?(php)?}i', '', $_POST['code']);
 
     // if there's only one line wrap it into a krumo() call
     if (preg_match('#^(?!var_dump|echo|print|< )([^\r\n]+?);?\s*$#is', $code, $m) && trim($m[1])) {
