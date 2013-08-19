@@ -3,6 +3,8 @@
 $options = array(
     // which string should represent a tab for indentation
     'tabsize' => 4,
+    // whitelist of IPs which don't need to be authenticated
+    'ip_whitelist' => array('127.0.0.1', '::1'),
 );
 
 /**
@@ -18,7 +20,7 @@ $options = array(
  *
  * Source on Github http://github.com/Seldaek/php-console
  */
-if (!in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'), true)) {
+if (!in_array($_SERVER['REMOTE_ADDR'], $options['ip_whitelist'], true)) {
     header('HTTP/1.1 401 Access unauthorized');
     die('ERR/401 Go Away');
 }
