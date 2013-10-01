@@ -3,6 +3,8 @@
 $options = array(
     // which string should represent a tab for indentation
     'tabsize' => 4,
+    // whitelist of IPs which don't need to be authenticated
+    'ip_whitelist' => array('127.0.0.1', '::1'),
 );
 
 /**
@@ -18,27 +20,12 @@ $options = array(
  *
  * Source on Github http://github.com/Seldaek/php-console
  */
-
- /* 
-php-console will only load if it is either launched from localhost or in a directory
-that requires HTTP authentication.
-*/
-$httpAuth = false; // Assume no authorization
-if(!empty($_SERVER['REMOTE_USER'])){
-	// The remote user is authorized
-	$httpAuth = true;
-} else if(function_exists('apache_request_headers') &&
-			array_key_exists('Authorization', apache_request_headers())){
-	// The Apache Web Server acknowledges authorization
-	$httpAuth = true;
-}
-
-if (!in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'), true) && !$httpAuth) {
+if (!in_array($_SERVER['REMOTE_ADDR'], $options['ip_whitelist'], true)) {
     header('HTTP/1.1 401 Access unauthorized');
     die('ERR/401 Go Away');
 }
 
-define('PHP_CONSOLE_VERSION', '1.3.0-dev');
+define('PHP_CONSOLE_VERSION', '1.4.0');
 require 'krumo/class.krumo.php';
 
 ini_set('log_errors', 0);
@@ -52,7 +39,8 @@ if (isset($_POST['code'])) {
         $code = stripslashes($code);
     }
 
-    $code = trim(preg_replace('{^\s*<\?(php)?}i', '', $_POST['code']));
+    // Important: replace only line by line, so the generated source lines will map 1:1 to the initial user input!
+    $code = preg_replace('{^\s*<\?(php)?}i', '', $_POST['code']);
 
     // if there's only one line wrap it into a krumo() call
     if (preg_match('#^(?!var_dump|echo|print|< )([^\r\n]+?);?\s*$#is', $code, $m) && trim($m[1])) {
@@ -127,6 +115,7 @@ if (isset($_POST['code'])) {
                             />
                         </object>
                     </span>
+                    <a href="" class="reset">Reset</a>
                 </div>
             </div>
             <input type="submit" name="subm" value="Try this!" />

@@ -1,3 +1,5 @@
+/*jslint browser: true */
+/*global ace, jQuery */
 /**
  * PHP Console
  *
@@ -11,10 +13,10 @@
  *
  * Source on Github http://github.com/Seldaek/php-console
  */
-(function(require, $, ace) {
+(function (require, $, ace) {
     "use strict";
 
-    var updateStatusBar, prepareClippyButton, refreshKrumoState, handleSubmit, initializeAce,
+    var updateStatusBar, prepareClippyButton, refreshKrumoState, handleSubmit, initializeAce, handleAjaxError,
         options, editor;
     options = {
         tabsize: 4,
@@ -24,15 +26,15 @@
     /**
      * updates the text of the status bar
      */
-    updateStatusBar = function(e) {
+    updateStatusBar = function (e) {
         var cursor_position = editor.getCursorPosition();
-        $('.statusbar .position').text('Line: ' + (1+cursor_position.row) + ', Column: ' + cursor_position.column);
+        $('.statusbar .position').text('Line: ' + (1 + cursor_position.row) + ', Column: ' + cursor_position.column);
     };
 
     /**
      * prepares a clippy button for clipboard access
      */
-    prepareClippyButton = function(e) {
+    prepareClippyButton = function (e) {
         var selection = editor.getSession().doc.getTextRange(editor.getSelectionRange());
         if (!selection) {
             $('.statusbar .copy').hide();
@@ -46,11 +48,11 @@
     /**
      * adds a toggle button to expand/collapse all krumo sub-trees at once
      */
-    refreshKrumoState = function() {
+    refreshKrumoState = function () {
         if ($('.krumo-expand').length > 0) {
             $('<a class="expand" href="#">Toggle all</a>')
-                .click(function(e) {
-                    $('div.krumo-element.krumo-expand').each(function(idx, el) {
+                .click(function (e) {
+                    $('div.krumo-element.krumo-expand').each(function (idx, el) {
                         window.krumo.toggle(el);
                     });
                     e.preventDefault();
@@ -62,13 +64,53 @@
     /**
      * does an async request to eval the php code and displays the result
      */
-    handleSubmit = function(e) {
+    handleSubmit = function (e) {
         e.preventDefault();
         $('div.output').html('<img src="loader.gif" class="loader" alt="" /> Loading ...');
 
-        $.post('?js=1', { code: editor.getSession().getValue() }, function(res) {
+        // store session
+        if (window.localStorage) {
+            localStorage.setItem('phpCode', editor.getSession().getValue());
+        }
+
+        var controlChars = {
+            'NUL' : /\x00/g, // Null char
+            'SOH' : /\x01/g, // Start of Heading
+            'STX' : /\x02/g, // Start of Text
+            'ETX' : /\x03/g, // End of Text
+            'EOT' : /\x04/g, // End of Transmission
+            'ENQ' : /\x05/g, // Enquiry
+            'ACK' : /\x06/g, // Acknowledgment
+            'BEL' : /\x07/g, // Bell
+            'BS'  : /\x08/g, // Back Space
+            'SO'  : /\x0E/g, // Shift Out / X-On
+            'SI'  : /\x0F/g, // Shift In / X-Off
+            'DLE' : /\x10/g, // Data Line Escape
+            'DC1' : /\x11/g, // Device Control 1 (oft. XON)
+            'DC2' : /\x12/g, // Device Control 2
+            'DC3' : /\x13/g, // Device Control 3 (oft. XOFF)
+            'DC4' : /\x14/g, // Device Control 4
+            'NAK' : /\x15/g, // Negative Acknowledgement
+            'SYN' : /\x16/g, // Synchronous Idle
+            'ETB' : /\x17/g, // End of Transmit Block
+            'CAN' : /\x18/g, // Cancel
+            'EM'  : /\x19/g, // End of Medium
+            'SUB' : /\x1A/g, // Substitute
+            'ESC' : /\x1B/g, // Escape
+            'FS'  : /\x1C/g, // File Separator
+            'GS'  : /\x1D/g, // Group Separator
+            'RS'  : /\x1E/g, // Record Separator
+            'US'  : /\x1F/g  // Unit Separator
+        };
+
+        // eval server-side
+        $.post('?js=1', { code: editor.getSession().getValue() }, function (res) {
             if (res.match(/#end-php-console-output#$/)) {
-                $('div.output').html(res.substring(0, res.length-24));
+                var result = res.substring(0, res.length - 24);
+                $.each(controlChars, function (identifier, regex) {
+                    result = result.replace(regex, '<span class="control-char">' + identifier + '</span>');
+                });
+                $('div.output').html(result);
             } else {
                 $('div.output').html(res + "<br /><br /><em>Script ended unexpectedly.</em>");
             }
@@ -76,17 +118,31 @@
         });
     };
 
-    initializeAce = function() {
-        var PhpMode, code;
+    handleAjaxError = function (event, jqxhr, settings, exception) {
+        $('div.output').html("<em>Error occured while posting your code.</em>");
+        refreshKrumoState();
+    };
+
+    initializeAce = function () {
+        var PhpMode, code, storedCode;
 
         code = $('#' + options.editor).text();
-        $('#' + options.editor).replaceWith('<div id="'+options.editor+'" class="'+options.editor+'"></div>');
+
+        // reload last session
+        if (window.localStorage && code.match(/(<\?php)?\s*/)) {
+            storedCode = localStorage.getItem('phpCode');
+            if (storedCode) {
+                code = storedCode;
+            }
+        }
+
+        $('#' + options.editor).replaceWith('<div id="' + options.editor + '" class="' + options.editor + '"></div>');
         $('#' + options.editor).text(code);
 
         editor = ace.edit(options.editor);
 
         editor.focus();
-        editor.gotoLine(3,0);
+        editor.gotoLine(3, 0);
 
         // set mode
         PhpMode = require("ace/mode/php").Mode;
@@ -102,6 +158,17 @@
             editor.getSession().selection.on('changeSelection', prepareClippyButton);
         }
 
+        // reset button
+        if (window.localStorage) {
+            $('.statusbar .reset').on('click', function (e) {
+                editor.getSession().setValue('<?php\n\n');
+                editor.focus();
+                editor.gotoLine(3, 0);
+                window.localStorage.setItem('phpCode', '');
+                e.preventDefault();
+            });
+        }
+
         // commands
         editor.commands.addCommand({
             name: 'submitForm',
@@ -109,17 +176,18 @@
                 win: 'Ctrl-Return|Alt-Return',
                 mac: 'Command-Return|Alt-Return'
             },
-            exec: function(editor) {
+            exec: function (editor) {
                 $('form').submit();
             }
         });
     };
 
-    $.console = function(settings) {
+    $.console = function (settings) {
         $.extend(options, settings);
 
-        $(function() {
+        $(function () {
             $(document).ready(initializeAce);
+            $(document).ajaxError(handleAjaxError);
 
             $('form').submit(handleSubmit);
         });
