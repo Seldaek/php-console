@@ -149,8 +149,12 @@
         editor.getSession().setMode(new PhpMode());
 
         // tab size
-        editor.getSession().setTabSize(options.tabsize);
-        editor.getSession().setUseSoftTabs(true);
+        if (options.tabsize) {
+            editor.getSession().setTabSize(options.tabsize);
+            editor.getSession().setUseSoftTabs(true);
+        } else {
+            editor.getSession().setUseSoftTabs(false);
+        }
 
         // events
         editor.getSession().selection.on('changeCursor', updateStatusBar);

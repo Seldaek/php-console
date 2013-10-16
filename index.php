@@ -1,11 +1,20 @@
 <?php
 
-$options = array(
-    // which string should represent a tab for indentation
+$defaults = array(
+    // how many spaces to use for indention, 0 will make it use real tabs
     'tabsize' => 4,
+
     // whitelist of IPs which don't need to be authenticated
+    // use '*' to allow any IP
     'ip_whitelist' => array('127.0.0.1', '::1'),
 );
+
+if (file_exists(__DIR__.'/config.php')) {
+    $options = include __DIR__.'/config.php';
+    $options = array_merge($defaults, $options);
+} else {
+    $options = $defaults;
+}
 
 /**
  * PHP Console
@@ -20,7 +29,9 @@ $options = array(
  *
  * Source on Github http://github.com/Seldaek/php-console
  */
-if (!in_array($_SERVER['REMOTE_ADDR'], $options['ip_whitelist'], true)) {
+if (!in_array('*', $options['ip_whitelist'], true) &&
+    !in_array($_SERVER['REMOTE_ADDR'], $options['ip_whitelist'], true)
+) {
     header('HTTP/1.1 401 Access unauthorized');
     die('ERR/401 Go Away');
 }

@@ -1,0 +1,10 @@
+<?php
+
+return array(
+    // how many spaces to use for indention, 0 will make it use real tabs
+    'tabsize' => 4,
+
+    // whitelist of IPs which don't need to be authenticated
+    // use '*' to allow any IP
+    'ip_whitelist' => array('127.0.0.1', '::1'),
+);

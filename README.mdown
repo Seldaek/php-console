@@ -3,9 +3,12 @@ PHP Console
 
 A web console to try your PHP code into
 
-Creating a test file or using php's interactive mode can be a bit cumbersome to try random php snippets. This allows you to run small bits of code easily right from your browser.
+Creating a test file or using php's interactive mode can be a bit cumbersome
+to try random php snippets. This allows you to run small bits of code easily
+right from your browser.
 
-It is secure since accessible only from the local host, and very easy to setup and use.
+It is secure since accessible only from the local host, and very easy to
+setup and use.
 
 Screenshot
 ----------
@@ -15,11 +18,20 @@ Screenshot
 Installation
 ------------
 
-Clone the git repo or download it as a zip/tarball, drop it somewhere in your local web document root and access it with http://localhost/path/to/php-console
+Clone the git repo or download it as a zip/tarball, drop it somewhere in your
+local web document root and access it with http://localhost/path/to/php-console
 
 You can also install it with Composer using this command:
 
     composer create-project --stability=dev --keep-vcs seld/php-console
+
+To update it just run `git pull` in the directory to pull the latest changes in.
+
+Configuration
+-------------
+
+Default settings are available in `config.php.dist`, if you would like to modify
+them, you can copy the file to `config.php` and edit settings.
 
 Contributing
 ------------
