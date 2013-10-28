@@ -7,11 +7,6 @@ Creating a test file or using php's interactive mode can be a bit cumbersome to 
 
 It is secure since accessible only from the local host, and very easy to setup and use.
 
-Screenshot
-----------
-
-<img src="http://sladewebsolutions.com/images/magento-console.jpg" alAt="Magento PHP Console screenshot" border="0" />
-
 Setup
 -----
 
