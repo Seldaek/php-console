@@ -70,11 +70,25 @@ if (isset($_POST['code'])) {
     }
 
     ob_start();
+    $start = microtime(true);
+    $memBefore = memory_get_usage(true);
+    
     eval($code);
-    $debugOutput = ob_get_clean();
-
+    
+    // compare with peak, because regular memory could be free'd already
+    $memAfter = memory_get_peak_usage(true);
+    $end = microtime(true);
+    $debugOutput .= ob_get_clean();
+    
     if (isset($_GET['js'])) {
         header('Content-Type: text/plain');
+        
+        $memory = sprintf('%.3f', ($memAfter - $memBefore) / 1024.0 / 1024.0); // in MB
+        $rendertime = sprintf('%.3f', (($end - $start) * 1000)); // in ms
+    
+        header('X-Memory-Usage: '. $memory);
+        header('X-Rendertime: '. $rendertime);
+        
         echo $debugOutput;
         die('#end-php-console-output#');
     }
@@ -127,6 +141,7 @@ if (isset($_POST['code'])) {
                         </object>
                     </span>
                     <a href="" class="reset">Reset</a>
+                    <span class="runtime-info"></span>
                 </div>
             </div>
             <input type="submit" name="subm" value="Try this!" />
