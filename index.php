@@ -51,7 +51,7 @@ if (isset($_POST['code'])) {
     }
 
     // Important: replace only line by line, so the generated source lines will map 1:1 to the initial user input!
-    $code = preg_replace('{^\s*<\?(php)?}i', '', $_POST['code']);
+    $code = preg_replace('{^\s*<\?(php)?\s*}i', '', $_POST['code']);
 
     // if there's only one line wrap it into a krumo() call
     if (preg_match('#^(?!var_dump|echo|print|< )([^\r\n]+?);?\s*$#is', $code, $m) && trim($m[1])) {
@@ -70,25 +70,25 @@ if (isset($_POST['code'])) {
     }
 
     ob_start();
-    $start = microtime(true);
     $memBefore = memory_get_usage(true);
-    
+    $start = microtime(true);
+
     eval($code);
-    
+
     // compare with peak, because regular memory could be free'd already
-    $memAfter = memory_get_peak_usage(true);
     $end = microtime(true);
+    $memAfter = memory_get_peak_usage(true);
     $debugOutput .= ob_get_clean();
-    
+
     if (isset($_GET['js'])) {
         header('Content-Type: text/plain');
-        
+
         $memory = sprintf('%.3f', ($memAfter - $memBefore) / 1024.0 / 1024.0); // in MB
         $rendertime = sprintf('%.3f', (($end - $start) * 1000)); // in ms
-    
+
         header('X-Memory-Usage: '. $memory);
         header('X-Rendertime: '. $rendertime);
-        
+
         echo $debugOutput;
         die('#end-php-console-output#');
     }
