@@ -104,8 +104,17 @@
         };
 
         // eval server-side
-        $.post('?js=1', { code: editor.getSession().getValue() }, function (res) {
-            if (res.match(/#end-php-console-output#$/)) {
+        $.post('?js=1', { code: editor.getSession().getValue() }, function (res, status, jqXHR) {
+            var mem = jqXHR.getResponseHeader("X-Memory-Usage") || "", 
+                rendertime = jqXHR.getResponseHeader("X-Rendertime") || "";
+            
+            if (mem || rendertime) {
+                $('.statusbar .runtime-info').text('Memory usage: '+ mem + ' MB, Rendertime: ' + rendertime + 'ms');
+            } else {
+                $('.statusbar .runtime-info').text('');
+            }
+            
+            if (res.match(/#end-php-console-output#$/)) {                
                 var result = res.substring(0, res.length - 24);
                 $.each(controlChars, function (identifier, regex) {
                     result = result.replace(regex, '<span class="control-char">' + identifier + '</span>');
