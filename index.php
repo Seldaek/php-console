@@ -7,6 +7,11 @@ $defaults = array(
     // whitelist of IPs which don't need to be authenticated
     // use '*' to allow any IP
     'ip_whitelist' => array('127.0.0.1', '::1'),
+
+    // bootstrap file, if defined this file will be included before
+    // the code entered by the user is evaluated. any variables and classes
+    // defined here will be accessible by the eval'd code
+    'bootstrap' => null,
 );
 
 if (file_exists(__DIR__.'/config.php')) {
@@ -45,6 +50,14 @@ error_reporting(E_ALL | E_STRICT);
 
 $debugOutput = '';
 
+function runCode($__source_code, $__bootstrap_file)
+{
+    if ($__bootstrap_file) {
+        require $__bootstrap_file;
+    }
+    eval($__source_code);
+}
+
 if (isset($_POST['code'])) {
     if (get_magic_quotes_gpc()) {
         $code = stripslashes($code);
@@ -73,7 +86,7 @@ if (isset($_POST['code'])) {
     $memBefore = memory_get_usage(true);
     $start = microtime(true);
 
-    eval($code);
+    runCode($code, $options['bootstrap']);
 
     // compare with peak, because regular memory could be free'd already
     $end = microtime(true);
