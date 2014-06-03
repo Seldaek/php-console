@@ -126,60 +126,68 @@ if (isset($_POST['code'])) {
         </script>
     </head>
     <body>
-        <div class="output"><?php echo $debugOutput ?></div>
-        <form method="POST" action="">
-            <div class="input">
-                <textarea class="editor" id="editor" name="code"><?php echo (isset($_POST['code']) ? htmlentities($_POST['code'], ENT_QUOTES, 'UTF-8') : "&lt;?php\n\n") ?></textarea>
-                <div class="statusbar">
-                    <span class="position">Line: 1, Column: 1</span>
-                    <span class="copy">
-                        Copy selection: <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="110" height="14" id="clippy">
-                            <param name="movie" value="clippy/clippy.swf"/>
-                            <param name="allowScriptAccess" value="always" />
-                            <param name="quality" value="high" />
-                            <param name="scale" value="noscale" />
-                            <param NAME="FlashVars" value="text=">
-                            <param name="bgcolor" value="#E8E8E8">
-                            <embed src="clippy/clippy.swf"
-                                   width="110"
-                                   height="14"
-                                   name="clippy"
-                                   quality="high"
-                                   allowScriptAccess="always"
-                                   type="application/x-shockwave-flash"
-                                   pluginspage="http://www.macromedia.com/go/getflashplayer"
-                                   FlashVars="text="
-                                   bgcolor="#E8E8E8"
-                            />
-                        </object>
-                    </span>
-                    <a href="" class="reset">Reset</a>
-                    <span class="runtime-info"></span>
-                </div>
+        <div class="console-wrapper">
+            <div class="input-wrapper">
+                <form method="POST" action="">
+                    <div class="input">
+                        <textarea class="editor" id="editor" name="code"><?php echo (isset($_POST['code']) ? htmlentities($_POST['code'], ENT_QUOTES, 'UTF-8') : "&lt;?php\n\n") ?></textarea>
+                    </div>
+                        <div class="statusbar">
+                            <span class="position">Line: 1, Column: 1</span>
+                            <span class="copy">
+                                Copy selection: <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="110" height="14" id="clippy">
+                                    <param name="movie" value="clippy/clippy.swf"/>
+                                    <param name="allowScriptAccess" value="always" />
+                                    <param name="quality" value="high" />
+                                    <param name="scale" value="noscale" />
+                                    <param NAME="FlashVars" value="text=">
+                                    <param name="bgcolor" value="#E8E8E8">
+                                    <embed src="clippy/clippy.swf"
+                                           width="110"
+                                           height="14"
+                                           name="clippy"
+                                           quality="high"
+                                           allowScriptAccess="always"
+                                           type="application/x-shockwave-flash"
+                                           pluginspage="http://www.macromedia.com/go/getflashplayer"
+                                           FlashVars="text="
+                                           bgcolor="#E8E8E8"
+                                    />
+                                </object>
+                            </span>
+                            <a href="" class="reset">Reset</a>
+                            <span class="runtime-info"></span>
+                        </div>
+                    <input type="submit" name="subm" value="Try this!" />
+                </form>
             </div>
-            <input type="submit" name="subm" value="Try this!" />
-        </form>
-        <div class="help">
-        debug:
-            &lt; foo()
-            krumo(foo());
+            <div class="output-wrapper">
+                <div class="output"><?php echo $debugOutput ?></div>
+            </div>
         </div>
-        <div class="help">
-        commands:
-            krumo::backtrace();
-            krumo::includes();
-            krumo::functions();
-            krumo::classes();
-            krumo::defines();
-        </div>
-        <div class="help">
-        misc:
-            press ctrl-enter to submit
-            put '#\n' on the first line to enforce
-                \n line breaks (\r\n etc work too)
-        </div>
-        <div class="footer">
-            php-console v<?php echo PHP_CONSOLE_VERSION ?> - by <a href="http://seld.be/">Jordi Boggiano</a> - <a href="http://github.com/Seldaek/php-console">sources on github</a>
+        <div class="footer-wrapper">
+            <div class="help">
+            debug:
+                &lt; foo()
+                krumo(foo());
+            </div>
+            <div class="help">
+            commands:
+                krumo::backtrace();
+                krumo::includes();
+                krumo::functions();
+                krumo::classes();
+                krumo::defines();
+            </div>
+            <div class="help">
+            misc:
+                press ctrl-enter to submit
+                put '#\n' on the first line to enforce
+                    \n line breaks (\r\n etc work too)
+            </div>
+            <div class="footer">
+                php-console v<?php echo PHP_CONSOLE_VERSION ?> - by <a href="http://seld.be/">Jordi Boggiano</a> - <a href="http://github.com/Seldaek/php-console">sources on github</a>
+            </div>
         </div>
     </body>
 </html>
