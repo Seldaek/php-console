@@ -46,7 +46,12 @@ Jordi Boggiano - <j.boggiano@seld.be><br />
 
 Changelog
 ---------
-
+- 1.5.0-dev
+  - Layout is not flex-css based
+  - Added a new `bootstrap` option to be include before source evaluation
+  - Moved tabsize, ip-whitelist into an option
+  - Added servers-side runtime information, to be rendered in the consoles statusbar
+  - Allow configuring options
 - 1.4.0
   - Added control-char escaping to make them more visible
 - 1.3.0
