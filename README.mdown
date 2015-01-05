@@ -47,6 +47,8 @@ Jordi Boggiano - <j.boggiano@seld.be><br />
 Changelog
 ---------
 
+- 1.5.0
+  - Updated bundled ACE editor to 1.1.8
 - 1.4.0
   - Added control-char escaping to make them more visible
 - 1.3.0
