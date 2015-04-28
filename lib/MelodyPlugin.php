@@ -4,6 +4,7 @@ use SensioLabs\Melody\Melody;
 use SensioLabs\Melody\Configuration\RunConfiguration;
 use Symfony\Component\Process\Process;
 use SensioLabs\Melody\Resource\ResourceParser;
+use Symfony\Component\Process\ExecutableFinder;
 
 /**
  * Class which integrates melody scripts into the php-console.
@@ -17,9 +18,14 @@ class MelodyPlugin {
     }
 
     public function isScriptingSupported() {
-        // the melody lib is bundled with the console, so the only additional requirement is a composer CLI
-        exec('which composer', $out, $ret);
-        return $ret === 0;
+        $executableFinder = new ExecutableFinder();
+        foreach (['composer', 'composer.phar'] as $candidateName) {
+            if ($composerPath = $executableFinder->find($candidateName, null, array(getcwd()))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function runScript($__source_code, $__bootstrap_file)
