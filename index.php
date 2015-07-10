@@ -169,6 +169,10 @@ if (isset($_POST['code'])) {
                                 </object>
                             </span>
                             <a href="" class="reset">Reset</a>
+                            <input type="text" name="inputFileName" id="inputFileNameToSaveAs" class="f" value="<?php echo (isset($_POST['inputFileName']) ? htmlentities($_POST['inputFileName'], ENT_QUOTES, 'UTF-8') : "console-".date("Y-m-d_H:i:s").".php")?>">
+                            <a href="#" class="save">Save</a>
+                            <input type="file" id="fileToLoad" class="f">
+                            <a href="#" class="load">Load</a>
                             <span class="runtime-info"></span>
                         </div>
                     <input type="submit" name="subm" value="Try this!" />
