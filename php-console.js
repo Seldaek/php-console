@@ -221,7 +221,6 @@
             	fileReader.onload = function(fileLoadedEvent) 
             	{
             		var textFromFileLoaded = fileLoadedEvent.target.result;
-            		//document.getElementById("inputTextToSave").value = textFromFileLoaded;
             		editor.getSession().setValue(textFromFileLoaded);
             		localStorage.setItem('phpCode',textFromFileLoaded);
             	};
