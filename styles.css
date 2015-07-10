@@ -31,6 +31,13 @@ input {
     font-size: 2em;
 }
 
+.f {
+	width: auto;
+	display: inline;
+	margin: 0px auto;
+	font-size: 10px;
+}
+
 a {
     color: #88f;
 }
