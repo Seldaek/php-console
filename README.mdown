@@ -27,6 +27,9 @@ You can also install it with Composer using this command:
 
 To update it just run `git pull` in the directory to pull the latest changes in.
 
+You can use the internal PHP server too.  
+run `php -S localhost:1337` in a terminal and go to `http://localhost:1337/`.
+
 Configuration
 -------------
 
