@@ -1,3 +1,4 @@
 vendor
 config.php
 composer.lock
+snippets/*.php
