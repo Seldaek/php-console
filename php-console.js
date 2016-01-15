@@ -16,7 +16,7 @@
 (function (require, $, ace) {
     "use strict";
 
-    var updateStatusBar, prepareClippyButton, refreshKrumoState, handleSubmit, initializeAce, handleAjaxError,
+    var updateStatusBar, prepareClippyButton, refreshKrumoState, handleCodeSubmit, handleSaveSnippetSubmit, initializeAce, handleAjaxError,
         options, editor;
     options = {
         tabsize: 4,
@@ -64,7 +64,7 @@
     /**
      * does an async request to eval the php code and displays the result
      */
-    handleSubmit = function (e) {
+    handleCodeSubmit = function (e) {
         e.preventDefault();
         $('div.output').html('<img src="loader.gif" class="loader" alt="" /> Loading ...');
 
@@ -105,16 +105,16 @@
 
         // eval server-side
         $.post('?js=1', { code: editor.getSession().getValue() }, function (res, status, jqXHR) {
-            var mem = jqXHR.getResponseHeader("X-Memory-Usage") || "", 
+            var mem = jqXHR.getResponseHeader("X-Memory-Usage") || "",
                 rendertime = jqXHR.getResponseHeader("X-Rendertime") || "";
-            
+
             if (mem || rendertime) {
                 $('.statusbar .runtime-info').text('Memory usage: '+ mem + ' MB, Rendertime: ' + rendertime + 'ms');
             } else {
                 $('.statusbar .runtime-info').text('');
             }
-            
-            if (res.match(/#end-php-console-output#$/)) {                
+
+            if (res.match(/#end-php-console-output#$/)) {
                 var result = res.substring(0, res.length - 24);
                 $.each(controlChars, function (identifier, regex) {
                     result = result.replace(regex, '<span class="control-char">' + identifier + '</span>');
@@ -125,6 +125,11 @@
             }
             refreshKrumoState();
         });
+    };
+
+    handleSaveSnippetSubmit = function (e) {
+        $('textarea[name="save_code"]').val(editor.getSession().getValue());
+        $('form[name="save_snippet"]').submit();
     };
 
     handleAjaxError = function (event, jqxhr, settings, exception) {
@@ -190,7 +195,7 @@
                 mac: 'Command-Return|Alt-Return'
             },
             exec: function (editor) {
-                $('form').submit();
+                $('form[name="code_submit"]').submit();
             }
         });
     };
@@ -202,7 +207,8 @@
             $(document).ready(initializeAce);
             $(document).ajaxError(handleAjaxError);
 
-            $('form').submit(handleSubmit);
+            $('form[name="code_submit"]').submit(handleCodeSubmit);
+            $('input[name="save"]').click(handleSaveSnippetSubmit);
         });
     };
 }(ace.require, jQuery, ace));

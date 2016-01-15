@@ -12,4 +12,7 @@ return array(
     // the code entered by the user is evaluated. any variables and classes
     // defined here will be accessible by the eval'd code
     'bootstrap' => null,
+
+    // where to store snippets that are saved
+    'snippet_store' => __DIR__ . '/snippets',
 );

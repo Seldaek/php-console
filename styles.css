@@ -150,3 +150,7 @@ a {
     clear: right;
     width: 350px;
 }
+
+.snippet-wrapper {
+    display: none;
+}
