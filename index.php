@@ -41,7 +41,7 @@ if (!in_array('*', $options['ip_whitelist'], true) &&
     die('ERR/401 Go Away');
 }
 
-define('PHP_CONSOLE_VERSION', '1.4.0');
+define('PHP_CONSOLE_VERSION', '1.5.0-dev');
 require 'krumo/class.krumo.php';
 require 'lib/MelodyPlugin.php';
 require 'vendor/autoload.php';
