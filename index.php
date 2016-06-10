@@ -90,6 +90,8 @@ if (isset($_POST['code'])) {
     $melodyPlugin = new MelodyPlugin();
     if ($melodyPlugin->isMelodyScript($code)) {
         if ($melodyPlugin->isScriptingSupported()) {
+            // make sure krumo class is available in the melody script
+            $code = str_replace('CONFIG;', "CONFIG;\nrequire 'krumo/class.krumo.php';", $code );
             $melodyPlugin->runScript($code, $options['bootstrap']);
         } else {
             throw new Exception('php-console misses required dependencies to run melody scripts.');
