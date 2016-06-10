@@ -5,6 +5,7 @@ use SensioLabs\Melody\Configuration\RunConfiguration;
 use Symfony\Component\Process\Process;
 use SensioLabs\Melody\Resource\ResourceParser;
 use Symfony\Component\Process\ExecutableFinder;
+use SensioLabs\Melody\Configuration\UserConfiguration;
 
 /**
  * Class which integrates melody scripts into the php-console.
@@ -37,7 +38,8 @@ class MelodyPlugin {
         $_ENV['COMPOSER_HOME'] = $tmpDir;
 
         $melody = new Melody();
-        $configuration = new RunConfiguration(/*true, true*/);
+        $runConfiguration = new RunConfiguration(/*true, true*/);
+        $userConfiguration = new UserConfiguration();
         $executor = function (Process $process, $verbose)
         {
             $callback = function ($type, $text)
@@ -60,6 +62,6 @@ class MelodyPlugin {
             @unlink($tmpFile);
         });
         file_put_contents($tmpFile, $__source_code);
-        $melody->run($tmpFile, array(), $configuration, $executor);
+        $melody->run($tmpFile, array(), $runConfiguration, $userConfiguration, $executor);
     }
 }
