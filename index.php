@@ -12,6 +12,9 @@ $defaults = array(
     // the code entered by the user is evaluated. any variables and classes
     // defined here will be accessible by the eval'd code
     'bootstrap' => null,
+
+    // maximun execution time for melody scripts
+    'melody-timeout' => 60,
 );
 
 if (file_exists(__DIR__.'/config.php')) {
@@ -88,6 +91,7 @@ if (isset($_POST['code'])) {
     $start = microtime(true);
 
     $melodyPlugin = new MelodyPlugin();
+    $melodyPlugin->setTimeout($options['melody-timeout']);
     if ($melodyPlugin->isMelodyScript($code)) {
         if ($melodyPlugin->isScriptingSupported()) {
             // make sure krumo class is available in the melody script

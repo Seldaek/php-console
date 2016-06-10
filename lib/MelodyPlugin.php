@@ -14,6 +14,8 @@ use SensioLabs\Melody\Configuration\UserConfiguration;
  * @see https://github.com/sensiolabs/melody
  */
 class MelodyPlugin {
+    private $timeout = 60;
+
     public function isMelodyScript($source) {
         return preg_match(ResourceParser::MELODY_PATTERN, $source);
     }
@@ -47,6 +49,7 @@ class MelodyPlugin {
                 // we only have one output channel to the browser, just echo "all the things"
                 echo $text;
             };
+            $process->setTimeout($this->timeout);
             $process->run($callback);
         };
 
@@ -63,5 +66,9 @@ class MelodyPlugin {
         });
         file_put_contents($tmpFile, $__source_code);
         $melody->run($tmpFile, array(), $runConfiguration, $userConfiguration, $executor);
+    }
+
+    public function setTimeout($timeout) {
+        $this->timeout = $timeout;
     }
 }
