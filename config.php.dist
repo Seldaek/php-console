@@ -14,5 +14,5 @@ return array(
     'bootstrap' => null,
 
     // maximun execution time for melody scripts
-    'melody-timeout' => 600,    
+    'melody_timeout' => 600,    
 );
