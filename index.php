@@ -60,7 +60,12 @@ function runCode($__source_code, $__bootstrap_file)
     if ($__bootstrap_file) {
         require $__bootstrap_file;
     }
-    eval($__source_code);
+    try {
+        eval($__source_code);
+    } catch (\Throwable $e) {
+        echo '<br><br>Uncaught exception: '.get_class($e).' '.$e->getMessage().' in '.$e->getFile().':'.$e->getLine().'<br>';
+        throw $e;
+    }
 }
 
 if (isset($_POST['code'])) {
