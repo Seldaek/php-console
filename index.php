@@ -44,6 +44,10 @@ if (!in_array('*', $options['ip_whitelist'], true) &&
     die('ERR/401 Go Away');
 }
 
+if (!file_exists('vendor/autoload.php')) {
+    die('Missing vendor/autoload.php file. Did you forget to run "composer install" ?');
+}
+
 define('PHP_CONSOLE_VERSION', '1.5.0-dev');
 require 'krumo/class.krumo.php';
 require 'lib/MelodyPlugin.php';
