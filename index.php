@@ -186,7 +186,7 @@ if (isset($_POST['code'])) {
                             <a href="" class="reset">Reset</a>
                             <span class="runtime-info"></span>
                         </div>
-                    <input type="submit" name="subm" value="Try this!" />
+                    <input type="submit" name="subm" value="Try this on PHP <?php echo PHP_MAJOR_VERSION, '.', PHP_MINOR_VERSION, '.', PHP_RELEASE_VERSION ?>!" />
                 </form>
             </div>
             <div class="output-wrapper">
