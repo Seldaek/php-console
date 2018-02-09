@@ -128,7 +128,7 @@
     };
 
     handleAjaxError = function (event, jqxhr, settings, exception) {
-        $('div.output').html("<em>Error occured while posting your code.</em>");
+        $('div.output').html("<em>Error occurred while posting your code.</em>");
         refreshKrumoState();
     };
 
