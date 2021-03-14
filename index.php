@@ -73,10 +73,6 @@ function runCode($__source_code, $__bootstrap_file)
 }
 
 if (isset($_POST['code'])) {
-    if (get_magic_quotes_gpc()) {
-        $code = stripslashes($code);
-    }
-
     $code = $_POST['code'];
 
     // if there's only one line wrap it into a krumo() call
