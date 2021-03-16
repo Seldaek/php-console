@@ -181,6 +181,41 @@
                 e.preventDefault();
             });
         }
+        
+        //Save
+        // Load and Save functions copied from:
+        // https://thiscouldbebetter.wordpress.com/2012/12/18/loading-editing-and-saving-a-text-file-in-html5-using-javascrip/
+        
+        $('.statusbar .save').on('click', function (e) {
+        	var textToWrite = editor.getSession().getValue();
+        	var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});
+        	var fileNameToSaveAs = document.getElementById("inputFileNameToSaveAs").value;
+        	var downloadLink = document.createElement("a");
+        	downloadLink.download = fileNameToSaveAs;
+        	downloadLink.innerHTML = "Download File";
+    		downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+    		downloadLink.style.display = "none";
+    		document.body.appendChild(downloadLink);
+        	}
+
+        	downloadLink.click();
+        });
+        
+        
+        //Load
+        $('.statusbar .load').on('click', function (e) {
+        	var fileToLoad = document.getElementById("fileToLoad").files[0];
+
+        	var fileReader = new FileReader();
+        	fileReader.onload = function(fileLoadedEvent) 
+        	{
+        		var textFromFileLoaded = fileLoadedEvent.target.result;
+        		editor.getSession().setValue(textFromFileLoaded);
+        		localStorage.setItem('phpCode',textFromFileLoaded);
+        	};
+        	fileReader.readAsText(fileToLoad, "UTF-8");
+        });
+        
 
         // commands
         editor.commands.addCommand({
